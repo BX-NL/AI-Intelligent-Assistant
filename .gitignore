@@ -169,3 +169,11 @@ cython_debug/
 
 # PyPI configuration file
 .pypirc
+
+# 论文相关
+.doc
+.docx
+
+# 其它
+Backup/
+References/
