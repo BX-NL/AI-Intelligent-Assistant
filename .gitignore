@@ -173,6 +173,7 @@ cython_debug/
 # 论文相关
 *.doc
 *.docx
+*.pptx
 
 # 其它
 Backup/
