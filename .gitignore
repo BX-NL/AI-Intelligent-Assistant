@@ -171,8 +171,8 @@ cython_debug/
 .pypirc
 
 # 论文相关
-.doc
-.docx
+*.doc
+*.docx
 
 # 其它
 Backup/
