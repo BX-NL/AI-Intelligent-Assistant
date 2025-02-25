@@ -4,6 +4,9 @@ import keyboard
 import tempfile
 from funasr import AutoModel
 from funasr.utils.postprocess_utils import rich_transcription_postprocess
+import config
+
+
 class STT():
     def __init__(self):
         # 模型初始化
@@ -21,17 +24,21 @@ class STT():
         self.RATE = 16000              # 采样率
         self.CHUNK = 1024              # 每个数据块包含的帧数
 
+        # 系统设置
+        self.setting = config.setting()
+        self.hotkey = self.setting.STT('hotkey')
+
     def record_audio(self):
-        # 录音功能，按下F7开始和结束录音
+        # 录音功能，按下指定按键开始和结束录音
         audio = pyaudio.PyAudio()
         frames = []
         stream = None
         is_recording = False
-        print('按F7键开始录音，再次按下F7键结束录音.')
+        print('点击', self.hotkey, '键开始录音，再次按下', self.hotkey, '键结束录音。')
 
         try:
             while True:
-                if keyboard.is_pressed('F7'):
+                if keyboard.is_pressed(hotkey=self.hotkey):
                     if not is_recording:
                         # 开始录音
                         print('开始录音...')
@@ -62,7 +69,8 @@ class STT():
         with tempfile.NamedTemporaryFile(suffix='.wav', delete=False) as tmpfile:
             wave_file = wave.open(tmpfile.name, 'wb')
             wave_file.setnchannels(self.CHANNELS)
-            wave_file.setsampwidth(pyaudio.PyAudio().get_sample_size(self.FORMAT))
+            wave_file.setsampwidth(
+                pyaudio.PyAudio().get_sample_size(self.FORMAT))
             wave_file.setframerate(self.RATE)
             wave_file.writeframes(b''.join(frames))
             wave_file.close()
@@ -81,6 +89,7 @@ class STT():
             print('识别结果:', text)
             return text
 
+
 if __name__ == '__main__':
     frames = STT().record_audio()
     text = STT().save_and_transcribe(frames)
@@ -91,7 +100,6 @@ if __name__ == '__main__':
 def demo():
     from funasr import AutoModel
     from funasr.utils.postprocess_utils import rich_transcription_postprocess
-
 
     model_dir = 'iic/SenseVoiceSmall'
 

@@ -7,8 +7,13 @@ pip3 install torch torchvision torchaudio --index-url https://download.pytorch.o
 core.py
 main.py
 model.py
+model_online.py
+model_offline.py
 stt.py
 tts.py
+config.py
+setting.yaml
 
 # changlog
 2025-02-23 最小系统验证完成
+2025-02-24 配置文件
