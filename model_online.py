@@ -34,7 +34,7 @@ if __name__ == '__main__':
 
 
 
-class Model_ChatGLM_Offline:
+class Model_ChatGLM_Offline_API:
     def __init__(self):
         self.api_url = 'http://localhost:8000'
 
