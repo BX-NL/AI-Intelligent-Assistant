@@ -28,6 +28,7 @@ class STT():
         self.setting = config.setting()
         self.hotkey = self.setting.STT('hotkey')
 
+
     def record_audio(self):
         # 录音功能，按下指定按键开始和结束录音
         audio = pyaudio.PyAudio()
@@ -63,6 +64,7 @@ class STT():
             audio.terminate()
 
         return frames
+
 
     def save_and_transcribe(self, frames):
         # 保存录音到临时文件并进行语音转文字
