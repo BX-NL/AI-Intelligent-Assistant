@@ -31,6 +31,8 @@ pip3 install torch torchvision torchaudio --index-url https://download.pytorch.o
 
 2025-02-26 增加多线程输入
 
+2025-02-27 优化部分代码
+
 ### templates
 
 [ChatGLM3](https://github.com/THUDM/ChatGLM3)
