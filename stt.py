@@ -17,54 +17,10 @@ class STT():
             vad_kwargs={'max_single_segment_time': 30000},
             device='cuda:0',
         )
-
-        # 录音设置
         self.FORMAT = pyaudio.paInt16  # 16位音频格式
         self.CHANNELS = 1              # 单声道
         self.RATE = 16000              # 采样率
         self.CHUNK = 1024              # 每个数据块包含的帧数
-
-        # 系统设置
-        self.setting = config.setting()
-        self.hotkey = self.setting.STT('hotkey')
-
-
-    def record_audio(self):
-        # 录音功能，按下指定按键开始和结束录音
-        audio = pyaudio.PyAudio()
-        frames = []
-        stream = None
-        is_recording = False
-        print('点击', self.hotkey, '键开始录音，再次按下', self.hotkey, '键结束录音。')
-
-        try:
-            while True:
-                if keyboard.is_pressed(hotkey=self.hotkey):
-                    if not is_recording:
-                        # 开始录音
-                        print('开始录音...')
-                        is_recording = True
-                        stream = audio.open(format=self.FORMAT, channels=self.CHANNELS,
-                                            rate=self.RATE, input=True, frames_per_buffer=self.CHUNK)
-                        frames = []
-                    else:
-                        # 结束录音
-                        print('录音结束.')
-                        is_recording = False
-                        break
-
-                if is_recording and stream is not None:
-                    data = stream.read(self.CHUNK)
-                    frames.append(data)
-
-        finally:
-            if stream:
-                stream.stop_stream()
-                stream.close()
-            audio.terminate()
-
-        return frames
-
 
     def save_and_transcribe(self, frames):
         # 保存录音到临时文件并进行语音转文字
@@ -93,34 +49,49 @@ class STT():
 
 
 if __name__ == '__main__':
-    frames = STT().record_audio()
-    text = STT().save_and_transcribe(frames)
-    print(text)
+    stt = STT()
+    # 录音设置 # todo 存在重复，以后再优化
+    FORMAT = pyaudio.paInt16  # 16位音频格式
+    CHANNELS = 1              # 单声道
+    RATE = 16000              # 采样率
+    CHUNK = 1024              # 每个数据块包含的帧数
 
+    # 系统设置
+    hotkey = config.setting().STT('hotkey')
 
-# test FunASR demo
-def demo():
-    from funasr import AutoModel
-    from funasr.utils.postprocess_utils import rich_transcription_postprocess
+    # 录音功能，按下指定按键开始和结束录音
+    audio = pyaudio.PyAudio()
+    frames = []
+    stream = None
+    is_recording = False
+    print('点击', hotkey, '键开始录音，再次按下', hotkey, '键结束录音。')
 
-    model_dir = 'iic/SenseVoiceSmall'
+    try:
+        while True:
+            if keyboard.is_pressed(hotkey=hotkey):
+                if not is_recording:
+                    # 开始录音
+                    print('开始录音...')
+                    is_recording = True
+                    stream = audio.open(format=FORMAT, channels=CHANNELS,
+                                        rate=RATE, input=True, frames_per_buffer=CHUNK)
+                    frames = []
+                else:
+                    # 结束录音
+                    print('录音结束.')
+                    is_recording = False
+                    break
 
-    model = AutoModel(
-        model=model_dir,
-        vad_model='fsmn-vad',
-        vad_kwargs={'max_single_segment_time': 30000},
-        device='cuda:0',
-    )
+            if is_recording and stream is not None:
+                data = stream.read(CHUNK)
+                frames.append(data)
 
-    # en
-    response = model.generate(
-        input='/example/en.mp3',
-        cache={},
-        language='auto',  # 'zn', 'en', 'yue', 'ja', 'ko', 'nospeech'
-        use_itn=True,
-        batch_size_s=60,
-        merge_vad=True,  #
-        merge_length_s=15,
-    )
-    text = rich_transcription_postprocess(response[0]['text'])
+    finally:
+        if stream:
+            stream.stop_stream()
+            stream.close()
+        audio.terminate()
+
+    print('开始转换')
+    text = stt.save_and_transcribe(frames)
     print(text)
