@@ -33,6 +33,18 @@ pip3 install torch torchvision torchaudio --index-url https://download.pytorch.o
 
 2025-02-27 优化部分代码
 
+2025-02-28 调整部分代码结构
+
+2025-03-01 增加在线大模型功能
+
 ### templates
 
 [ChatGLM3](https://github.com/THUDM/ChatGLM3)
+
+[FunASR](https://github.com/modelscope/FunASR)
+
+[EdgeTTS](https://github.com/rany2/edge-tts)
+
+### Thanks
+
+[智谱AI开放平台](https://bigmodel.cn/)

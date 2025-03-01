@@ -3,7 +3,7 @@ from cpm_kernels.kernels.base import round_up
 import time
 import config
 
-class llm():
+class model():
     def __init__(self):
         self.setting = config.setting()
         model_path = self.setting.model('model_path')

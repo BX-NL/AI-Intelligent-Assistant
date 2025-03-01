@@ -178,3 +178,6 @@ cython_debug/
 # 其它
 Backup/
 References/
+
+# Private
+api_key.txt
