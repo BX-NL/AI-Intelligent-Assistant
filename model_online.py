@@ -1,37 +1,48 @@
 import requests
+import config
 from zhipuai import ZhipuAI
+
 
 class Model_ChatGLM_Online:
     def __init__(self):
-        self.api_key='26fc89e9250b0009c3d6aa32efc6af94.hpx9aZVj2hDMRCX6'
-        self.model = 'glm-4-flash'
+        # 导入设置
+        self.setting = config.setting()
+        # 智普清言的设置
+        self.api_key = self.setting.model('zhipuAI_API_key')
+        self.model = self.setting.model('zhipuAI_model')
+        
+        prompt = self.setting.model('prompt')
+        self.messages = [
+            {'role': 'system', 'content': prompt},
+            # {'role': 'user', 'content': '从现在开始，我的名字是Ninglog，你将作为我的个人语音助理，如果你明白以上规则，请回复:我明白了。'},
+            # {'role': 'assistant', 'content': '我明白了。'},
+            # {'role': 'user', 'content': '请介绍一下你自己。'},
+        ]
 
-    def run(self):
+    def run(self, user_message):
         new_message = ''
-        client = ZhipuAI(api_key=self.api_key)  # 请填写您自己的APIKey
+        client = ZhipuAI(api_key=self.api_key)
         response = client.chat.completions.create(
             model=self.model,
-            messages=[
-                {'role': 'system', 'content': '你是一个AI Vtuber, 你的名字是Luna Alice，乐于回答各种问题的小助手，你的任务是提供有趣的建议。'},
-                {'role': 'user', 'content': '从现在开始，我的名字是Ninglog，你将作为我的个人语音助理，如果你明白以上规则，请回复:我明白了。'},
-                # {'role': 'assistant', 'content': '我明白了。'},
-                # {'role': 'user', 'content': '请介绍一下你自己。'},
-            ],
-            stream=True,
+            messages=self.messages +
+            [{'role': 'user', 'content': user_message}],
+            stream=True
         )
         # print(response)
+        # 这个是流式输出，先占个坑位，万一用得上
         for chunk in response:
             text = chunk.choices[0].delta.content
             new_message = new_message + text
             print(text)
         print(new_message)
-
+        self.messages += {'role': 'assistant', 'content': new_message}
+        return new_message
 
 
 if __name__ == '__main__':
-    Model_ChatGLM_Online().run()
-
-
+    while True:
+        user_message = str(input('输入文本：'))
+        new_message = Model_ChatGLM_Online().run(user_message)
 
 
 class Model_ChatGLM_Offline_API:

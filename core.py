@@ -1,13 +1,14 @@
+from model_offline import model
 from stt import STT
-# import model_offline
-from model_offline import llm
 from tts import TTS
+# import model_offline
+
 
 class Core:
     def __init__(self):
         # 初始化各模块
+        self.model = model()
         self.stt = STT()
-        self.model = llm()
         self.tts = TTS()
         pass
 
@@ -29,6 +30,7 @@ class Core:
 
     def synthesize_and_play(self, text):
         self.tts.synthesize_and_play(text)
+
 
 if __name__ == '__main__':
     print('core')
