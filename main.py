@@ -103,7 +103,7 @@ def main():
             break
 
         # 模型生成响应
-        response_text = core.generate_response(text, history)
+        response_text = core.generate_response(history, text)
         print('AI 响应:', response_text)
 
         # 文本转语音并播放

@@ -24,10 +24,13 @@ class model():
         print('用时', time.time()-start_time, '秒')
         return history
 
-    def start(self, text, history):
+    def generate(self, history, text):
         print('推理中')
         start_time = time.time()
         response, history = self.model.chat(self.tokenizer, text, history=history)
         # print(response)
         print('用时', time.time()-start_time, '秒')
         return response, history
+    
+if __name__ == '__mian__':
+    pass
