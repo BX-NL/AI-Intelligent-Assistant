@@ -1,16 +1,18 @@
 import requests
 import config
+import time
 from zhipuai import ZhipuAI
 
 
-class Model_ChatGLM_Online:
+class model:
     def __init__(self):
         # 导入设置
         self.setting = config.setting()
         # 智普清言的设置
         self.api_key = self.setting.model('zhipuAI_API_key')
         self.model = self.setting.model('zhipuAI_model')
-        
+        self.client = ZhipuAI(api_key=self.api_key)
+
         prompt = self.setting.model('prompt')
         self.messages = [
             {'role': 'system', 'content': prompt},
@@ -19,13 +21,20 @@ class Model_ChatGLM_Online:
             # {'role': 'user', 'content': '请介绍一下你自己。'},
         ]
 
-    def run(self, user_message):
+    def in_prompt(self):
+        print('提示词注入中')
+        start_time = time.time()
+        history = self.messages
+        print('[对话]你好，我是爱丽丝')
+        print('用时', time.time()-start_time, '秒')
+        return history
+
+    def generate(self, history, user_message):
         new_message = ''
-        client = ZhipuAI(api_key=self.api_key)
-        response = client.chat.completions.create(
+        history.append({'role': 'user', 'content': user_message})
+        response = self.client.chat.completions.create(
             model=self.model,
-            messages=self.messages +
-            [{'role': 'user', 'content': user_message}],
+            messages=history,
             stream=True
         )
         # print(response)
@@ -35,14 +44,18 @@ class Model_ChatGLM_Online:
             new_message = new_message + text
             print(text)
         print(new_message)
-        self.messages += {'role': 'assistant', 'content': new_message}
-        return new_message
+        history.append({'role': 'assistant', 'content': new_message})
+        # print(history)
+        return new_message, history
 
 
 if __name__ == '__main__':
+    Model = model()
+    history = Model.in_prompt()
+    # print(history)
     while True:
         user_message = str(input('输入文本：'))
-        new_message = Model_ChatGLM_Online().run(user_message)
+        new_message = Model.generate(history, user_message)
 
 
 class Model_ChatGLM_Offline_API:
