@@ -1,7 +1,13 @@
-from model_offline import model
 from stt import STT
 from tts import TTS
-# import model_offline
+import config
+
+if config.setting().main('LLM') == 'offline':
+    from model_offline import model
+elif config.setting().main('LLM') == 'online':
+    from model_online import model
+else:
+    print('大模型加载失败')
 
 
 class Core:
@@ -24,8 +30,8 @@ class Core:
         history = self.model.in_prompt()
         return history
 
-    def generate_response(self, text, history):
-        response, self.history = self.model.start(text, history)
+    def generate_response(self, history, text):
+        response, self.history = self.model.generate(history, text)
         return response
 
     def synthesize_and_play(self, text):

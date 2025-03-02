@@ -37,6 +37,8 @@ pip3 install torch torchvision torchaudio --index-url https://download.pytorch.o
 
 2025-03-01 增加在线大模型功能
 
+2025-03-02 将在线大模型功能加入，并可随时切换
+
 ### templates
 
 [ChatGLM3](https://github.com/THUDM/ChatGLM3)
