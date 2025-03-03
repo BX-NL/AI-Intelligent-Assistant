@@ -170,6 +170,11 @@ cython_debug/
 # PyPI configuration file
 .pypirc
 
+# 测试备用
+model_test.py
+tts_bak.py
+stt_bak.py
+
 # 论文相关
 *.doc
 *.docx
