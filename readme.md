@@ -13,13 +13,20 @@ pip3 install torch torchvision torchaudio --index-url https://download.pytorch.o
 ### Tree
     core.py
     main.py
-    model.py
     model_online.py
     model_offline.py
     stt.py
     tts.py
     config.py
     setting.yaml
+    app.py
+    templates/
+        index.html
+    static/
+        css/
+            style.css
+        js/
+            script.js
 
 ### changlog
 
@@ -38,6 +45,8 @@ pip3 install torch torchvision torchaudio --index-url https://download.pytorch.o
 2025-03-01 增加在线大模型功能
 
 2025-03-02 将在线大模型功能加入，并可随时切换
+
+2025-03-03 前端初期测试中
 
 ### templates
 

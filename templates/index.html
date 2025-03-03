@@ -1,52 +1,25 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI Assistant</title>
+    <title>DeepSeek Chat</title>
+    <link rel="stylesheet" href="../static/css/style.css">
 </head>
 <body>
-    <h1>AI Assistant</h1>
-    <button id="startRecord">Start Recording</button>
-    <button id="stopRecord" disabled>Stop Recording</button>
-    <audio id="audioPlayer" controls></audio>
-
-    <script>
-        let mediaRecorder;
-        let audioChunks = [];
-
-        document.getElementById('startRecord').addEventListener('click', async () => {
-            const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-            mediaRecorder = new MediaRecorder(stream);
-            mediaRecorder.start();
-
-            mediaRecorder.ondataavailable = (event) => {
-                audioChunks.push(event.data);
-            };
-
-            document.getElementById('startRecord').disabled = true;
-            document.getElementById('stopRecord').disabled = false;
-        });
-
-        document.getElementById('stopRecord').addEventListener('click', () => {
-            mediaRecorder.stop();
-            document.getElementById('startRecord').disabled = false;
-            document.getElementById('stopRecord').disabled = true;
-
-            const audioBlob = new Blob(audioChunks, { type: 'audio/wav' });
-            const formData = new FormData();
-            formData.append('audio_data', audioBlob, 'recording.wav');
-
-            fetch('/send_audio', {
-                method: 'POST',
-                body: formData
-            }).then(response => response.json())
-              .then(data => {
-                  const audioPlayer = document.getElementById('audioPlayer');
-                  audioPlayer.src = URL.createObjectURL(new Blob([data.audio_output], { type: 'audio/mp3' }));
-                  audioPlayer.play();
-              });
-        });
-    </script>
+    <div class="chat-container">
+        <div class="chat-header">
+            <h1>DeepSeek Chat</h1>
+        </div>
+        <div class="chat-history" id="chat-history">
+            <!-- 聊天记录会动态加载到这里 -->
+        </div>
+        <div class="chat-input">
+            <input type="text" id="user-input" placeholder="输入消息或按下语音按钮">
+            <button id="voice-btn">🎤</button>
+            <button id="send-btn">发送</button>
+        </div>
+    </div>
+    <script src="../static/js/script.js"></script>
 </body>
 </html>
