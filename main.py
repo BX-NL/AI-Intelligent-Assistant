@@ -3,6 +3,8 @@ import time
 import keyboard
 import pyaudio
 import threading
+# import uvicorn
+from fastapi import FastAPI
 from funasr import AutoModel
 import config
 from core import Core
@@ -18,7 +20,7 @@ def main():
     core = Core()  # 初始化核心模块
     # || 这行不能删，不然跑不起来，我也不知道为什么Core那边没把这玩意也init
     stt = STT()  # 初始化语音转文字模块
-    audio = pyaudio.PyAudio() # 初始化音频库
+    audio = pyaudio.PyAudio()  # 初始化音频库
     print('大模型初始化中')
     history = core.get_in_prompt()
 
@@ -110,6 +112,14 @@ def main():
         core.synthesize_and_play(response_text)
         print('语音播放完成。')
 
+
+app = FastAPI()
+
+
+@app.get("/")
+async def mian():
+    main()
+    return {"message": "Hello, World!"}
 
 if __name__ == '__main__':
     main()
