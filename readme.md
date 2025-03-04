@@ -4,6 +4,8 @@ pip install requirement.txt
 
 pip3 install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu124
 
+uvicorn main:app --reload
+
 ### 已知bug
 
 0.大量功能写成一坨，~~趁着还能看明白赶紧改了~~
@@ -47,6 +49,8 @@ pip3 install torch torchvision torchaudio --index-url https://download.pytorch.o
 2025-03-02 将在线大模型功能加入，并可随时切换
 
 2025-03-03 前端初期测试中
+
+2025-03-04 尝试部署分布式
 
 ### templates
 
