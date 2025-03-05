@@ -52,6 +52,8 @@ uvicorn main:app --reload
 
 2025-03-04 尝试部署分布式
 
+2025-03-05 开始设计操控功能
+
 ### templates
 
 [ChatGLM3](https://github.com/THUDM/ChatGLM3)
