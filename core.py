@@ -17,7 +17,7 @@ class Core:
         self.stt = STT()
         self.tts = TTS()
         pass
-    
+
     # 该接口已弃用
     def record_audio(self):
         frames = self.stt.record_audio()
