@@ -1,8 +1,10 @@
 import re
+import os
+import time
+import pyautogui
+
 
 def extract_message(response_text):
-
-    # response_text = "[test] This is an test message!"
 
     # 提取 type
     type_pattern = r'\[(.*?)\]'
@@ -22,5 +24,17 @@ def extract_message(response_text):
 
     return type, message
 
-def device_Control(type, message):
-    pass
+
+def device_control(type, message):
+    if type == '对话':
+        pass
+    elif type == '指令':
+        pass
+    elif type == '文本':
+        pyautogui.typewrite(message=message, interval=0.1)
+
+
+if __name__ == '__main__':
+    response_text = '[文本] This is an test message!'
+    type, message = extract_message(response_text)
+    device_control(type, message)

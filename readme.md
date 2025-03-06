@@ -54,6 +54,8 @@ uvicorn main:app --reload
 
 2025-03-05 开始设计操控功能
 
+2025-03-06 增加操控-输入文本功能
+
 ### templates
 
 [ChatGLM3](https://github.com/THUDM/ChatGLM3)
@@ -65,3 +67,5 @@ uvicorn main:app --reload
 ### Thanks
 
 [智谱AI开放平台](https://bigmodel.cn/)
+
+[Neuro](https://github.com/kimjammer/Neuro)
