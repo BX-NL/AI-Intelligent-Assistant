@@ -29,6 +29,12 @@ def device_control(type, message):
     if type == '对话':
         pass
     elif type == '指令':
+        if message[0:2] == '打开':
+            file_name = message[2:-1] + '.lnk'
+            if file_name == '浏览器.lnk': file_name = 'Microsoft Edge.lnk'
+            # print(file_name)
+            file_path = os.path.join('C:\ProgramData\Microsoft\Windows\Start Menu\Programs', file_name)
+            os.startfile(file_path)
         pass
     elif type == '文本':
         pyautogui.typewrite(message=message, interval=0.1)
@@ -36,5 +42,6 @@ def device_control(type, message):
 
 if __name__ == '__main__':
     response_text = '[文本] This is an test message!'
+    response_text = '[指令]打开浏览器。'
     type, message = extract_message(response_text)
     device_control(type, message)
