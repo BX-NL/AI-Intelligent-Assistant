@@ -19,6 +19,7 @@ uvicorn main:app --reload
     model_offline.py
     stt.py
     tts.py
+    control.py
     config.py
     setting.yaml
     app.py
@@ -55,6 +56,8 @@ uvicorn main:app --reload
 2025-03-05 开始设计操控功能
 
 2025-03-06 增加操控-输入文本功能
+
+2025-03-07 增加操控-控制设备功能
 
 ### templates
 
