@@ -4,7 +4,7 @@ import time
 from zhipuai import ZhipuAI
 
 
-class model:
+class Model:
     def __init__(self):
         # 导入设置
         self.setting = config.setting()
@@ -50,12 +50,12 @@ class model:
 
 
 if __name__ == '__main__':
-    Model = model()
-    history = Model.in_prompt()
+    model = Model()
+    history = model.in_prompt()
     # print(history)
     while True:
         user_message = str(input('输入文本：'))
-        new_message = Model.generate(history, user_message)
+        new_message = model.generate(history, user_message)
 
 
 class Model_ChatGLM_Offline_API:

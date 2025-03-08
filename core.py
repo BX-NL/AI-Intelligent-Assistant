@@ -3,9 +3,9 @@ from tts import TTS
 import config
 
 if config.setting().main('LLM') == 'offline':
-    from model_offline import model
+    from model_offline import Model
 elif config.setting().main('LLM') == 'online':
-    from model_online import model
+    from model_online import Model
 else:
     print('大模型加载失败')
 
@@ -13,7 +13,7 @@ else:
 class Core:
     def __init__(self):
         # 初始化各模块
-        self.model = model()
+        self.model = Model()
         self.stt = STT()
         self.tts = TTS()
         pass
