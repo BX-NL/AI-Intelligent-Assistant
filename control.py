@@ -17,7 +17,7 @@ class Control:
 
     def extract_message(self, response_text):
 
-        # 提取 type
+        # 提取type
         type_pattern = r'\[(.*?)\]'
         type_match = re.search(type_pattern, response_text)
         if type_match:
@@ -25,7 +25,7 @@ class Control:
         else:
             type = 'ERROR'
 
-        # 提取 message
+        # 提取message
         message_pattern = r'\]\s*(.*)'
         message_match = re.search(message_pattern, response_text)
         if message_match:
@@ -40,28 +40,24 @@ class Control:
             pass
 
         elif type == '指令':
-            if message[0:2] == '打开':
+            if message[0:2] == '启动':
                 # 字符串切片获取目标程序
-                file_name = message[2:-1]
+                file_name = message[2:]
                 # 搜寻目标程序对应的文件名
                 try:
                     if file_name in self.list_sys:
                         file_name = self.list_sys[file_name] + '.lnk'
                         # 生成文件路径
-                        file_path = os.path.join(
-                            'C:/ProgramData/Microsoft/Windows/Start Menu/Programs', file_name)
+                        file_path = os.path.join('C:/ProgramData/Microsoft/Windows/Start Menu/Programs', file_name)
                     elif file_name in self.list_usr:
                         file_name = self.list_usr[file_name] + '.lnk'
                         # 生成文件路径
-                        print(file_name)
-                        file_path = os.path.join(
-                            f'C:/Users/{self.username}/AppData/Roaming/Microsoft/Windows/Start Menu/Programs', file_name)
-                        print(file_path)
+                        file_path = os.path.join(f'C:/Users/{self.username}/AppData/Roaming/Microsoft/Windows/Start Menu/Programs', file_name)
                     elif file_name in self.list_cus:
                         file_name = self.list_cus[file_name] + '.lnk'
                         # 生成文件路径
                         file_path = os.path.join('../', file_name)
-
+                    print(file_path)
                 except:
                     print('ERROR')
                     pass
@@ -75,6 +71,7 @@ class Control:
 if __name__ == '__main__':
     control = Control()
     response_text = '[文本]This is an test message!'
-    response_text = '[指令]打开Onedrive。'
+    response_text = '[指令]启动浏览器'
     type, message = control.extract_message(response_text)
+    print(type, message)
     control.device_control(type, message)

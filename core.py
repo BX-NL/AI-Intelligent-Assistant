@@ -1,6 +1,7 @@
 from stt import STT
 from tts import TTS
 import config
+from control import Control
 
 if config.setting().main('LLM') == 'offline':
     from model_offline import Model
@@ -16,6 +17,7 @@ class Core:
         self.model = Model()
         self.stt = STT()
         self.tts = TTS()
+        self.control = Control()
         pass
 
     # 该接口已弃用
@@ -37,6 +39,10 @@ class Core:
 
     def synthesize_and_play(self, text):
         self.tts.synthesize_and_play(text)
+
+    def system_control(self, text):
+        type, message = self.control.extract_message(text)
+        self.control.device_control(type, message)
 
 
 if __name__ == '__main__':

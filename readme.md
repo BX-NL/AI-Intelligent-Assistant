@@ -63,6 +63,8 @@ uvicorn main:app --reload
 
 2025-03-09 增加更多程序路径选择
 
+2025-03-10 完善操控功能
+
 ### templates
 
 [ChatGLM3](https://github.com/THUDM/ChatGLM3)

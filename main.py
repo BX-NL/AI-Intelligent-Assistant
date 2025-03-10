@@ -112,6 +112,10 @@ def main():
         core.synthesize_and_play(response_text)
         print('语音播放完成。')
 
+        # 执行命令
+        core.system_control(response_text)
+        print('指令执行完毕')
+
 
 app = FastAPI()
 
