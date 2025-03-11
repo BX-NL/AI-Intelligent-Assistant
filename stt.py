@@ -17,6 +17,7 @@ class STT():
             vad_kwargs={'max_single_segment_time': 30000},
             device='cuda:0',
         )
+        # 音频格式，要和录音端保持一致
         self.FORMAT = pyaudio.paInt16  # 16位音频格式
         self.CHANNELS = 1              # 单声道
         self.RATE = 16000              # 采样率
@@ -27,8 +28,7 @@ class STT():
         with tempfile.NamedTemporaryFile(suffix='.wav', delete=False) as tmpfile:
             wave_file = wave.open(tmpfile.name, 'wb')
             wave_file.setnchannels(self.CHANNELS)
-            wave_file.setsampwidth(
-                pyaudio.PyAudio().get_sample_size(self.FORMAT))
+            wave_file.setsampwidth(pyaudio.PyAudio().get_sample_size(self.FORMAT))
             wave_file.setframerate(self.RATE)
             wave_file.writeframes(b''.join(frames))
             wave_file.close()
@@ -43,12 +43,14 @@ class STT():
                 merge_vad=True,
                 merge_length_s=15,
             )
+            # 获取返回结果
             text = rich_transcription_postprocess(response[0]['text'])
             print('识别结果:', text)
             return text
 
 
 if __name__ == '__main__':
+    # demo 此处仅用于测试
     stt = STT()
     # 录音设置 # todo 存在重复，以后再优化
     FORMAT = pyaudio.paInt16  # 16位音频格式

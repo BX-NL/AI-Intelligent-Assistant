@@ -6,14 +6,18 @@ from zhipuai import ZhipuAI
 
 class Model:
     def __init__(self):
-        # 导入设置
+        # 系统设置
         self.setting = config.setting()
-        # 智普清言的设置
+        # 智普清言的APIkey
         self.api_key = self.setting.model('zhipuAI_API_key')
+        # 智普清言的模型选用
         self.model = self.setting.model('zhipuAI_model')
+        # 设置连接
         self.client = ZhipuAI(api_key=self.api_key)
 
+        # 预设的提示词
         prompt = self.setting.model('prompt')
+        # 输入的格式
         self.messages = [
             {'role': 'system', 'content': prompt},
             # {'role': 'user', 'content': '从现在开始，我的名字是Ninglog，你将作为我的个人语音助理，如果你明白以上规则，请回复:我明白了。'},
@@ -21,6 +25,7 @@ class Model:
             # {'role': 'user', 'content': '请介绍一下你自己。'},
         ]
 
+    # 注入提示词
     def in_prompt(self):
         print('提示词注入中')
         start_time = time.time()
@@ -29,21 +34,22 @@ class Model:
         print('用时', time.time()-start_time, '秒')
         return history
 
+    # 传入用户输入的文本并获取回复
     def generate(self, history, user_message):
+        # 清空消息
         new_message = ''
+        # 记录历史信息
         history.append({'role': 'user', 'content': user_message})
-        response = self.client.chat.completions.create(
-            model=self.model,
-            messages=history,
-            stream=True
-        )
+        # 传入用户输入的文本并获取回复
+        response = self.client.chat.completions.create(model=self.model, messages=history, stream=True)
         # print(response)
-        # 这个是流式输出，先占个坑位，万一用得上
+        # 流式输出 # todo 先占个坑位，万一用得上
         for chunk in response:
             text = chunk.choices[0].delta.content
             new_message = new_message + text
             print(text)
-        print(new_message)
+        # print(new_message)
+        # 记录历史信息
         history.append({'role': 'assistant', 'content': new_message})
         # print(history)
         return new_message, history
@@ -58,6 +64,7 @@ if __name__ == '__main__':
         new_message = model.generate(history, user_message)
 
 
+# demo 本地部署API用法，可用于分布式，有空再研究
 class Model_ChatGLM_Offline_API:
     def __init__(self):
         self.api_url = 'http://localhost:8000'
@@ -70,4 +77,4 @@ class Model_ChatGLM_Offline_API:
         if response.status_code == 200:
             return response.json()['response']
         else:
-            raise Exception('Failed to connect to model API')
+            raise Exception('API连接失败')

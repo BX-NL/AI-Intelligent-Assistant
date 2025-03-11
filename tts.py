@@ -7,20 +7,19 @@ import tempfile
 
 class TTS:
     def __init__(self):
-        self.voice = 'zh-CN-XiaoxiaoNeural'  # 默认语音
-        self.rate = '+0%'  # 默认语速
+        # 默认音色
+        self.voice = 'zh-CN-XiaoxiaoNeural'
+        # 默认语速
+        self.rate = '+0%'
 
+    # 文本转语音，异步
     async def synthesize(self, text):
-        """
-        将文本转换为语音
-        :param text: 输入的文本
-        :return: 音频数据（字节流）
-        """
+        # 大陆内使用EdgeTTS需要代理，请设置
         communicate = edge_tts.Communicate(
             text=text,
             voice=self.voice,
             rate=self.rate,
-            proxy='http://127.0.0.1:7890'  # 如果需要代理，请设置
+            proxy='http://127.0.0.1:7890'
         )
 
         # 将音频数据保存到内存中
@@ -28,14 +27,12 @@ class TTS:
         async for chunk in communicate.stream():
             if chunk["type"] == "audio":
                 audio_data.write(chunk["data"])
+        
+        stream = audio_data.getvalue()
 
-        return audio_data.getvalue()
+        return stream
 
     def synthesize_and_play(self, text):
-        """
-        将文本转换为语音并播放
-        :param text: 输入的文本
-        """
         # 异步合成语音
         loop = asyncio.new_event_loop()
         asyncio.set_event_loop(loop)
@@ -45,7 +42,8 @@ class TTS:
         with tempfile.NamedTemporaryFile(suffix='.mp3', delete=False) as tmpfile:
             tmpfile.write(audio_data)
             tmpfile_path = tmpfile.name
-            time.sleep(1)
+            # 等待0.5秒避免文件未写入完成
+            time.sleep(0.5)
 
         # 使用 playsound 播放音频
         # 可换pygame库避免临时文件

@@ -8,8 +8,9 @@ class Control:
     def __init__(self):
         # 系统开始菜单快捷方式
         self.list_sys = {'浏览器': 'Microsoft Edge', }
-        # 用户开始菜单快捷方式
+        # 获取用户名
         self.username = os.environ.get('USERNAME')
+        # 用户开始菜单快捷方式
         self.list_usr = {'Onedrive': 'OneDrive - Personal', }
         # 自定义路径
         self.list_cus = {'test': 'testtest', }
@@ -66,6 +67,12 @@ class Control:
 
         elif type == '文本':
             pyautogui.typewrite(message=message, interval=0.1)
+
+        elif type == 'ERROR':
+            print('回复文本不符合格式，请检查大模型。')
+        
+        else:
+            print('文本错误')
 
 
 if __name__ == '__main__':
