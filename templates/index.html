@@ -3,23 +3,172 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DeepSeek Chat</title>
-    <link rel="stylesheet" href="../static/css/style.css">
+    <title>语音交互系统</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            height: 100vh;
+            background-color: #f7f7f7;
+        }
+        .sidebar {
+            width: 250px;
+            background-color: #2c3e50;
+            color: white;
+            padding: 20px;
+            box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+        }
+        .main-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            padding: 20px;
+        }
+        .chat-history {
+            flex: 1;
+            overflow-y: auto;
+            padding: 10px;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+        }
+        .message {
+            margin-bottom: 15px;
+            padding: 10px;
+            border-radius: 8px;
+            max-width: 70%;
+        }
+        .user-message {
+            background-color: #e1f5fe;
+            margin-left: auto;
+        }
+        .bot-message {
+            background-color: #f1f1f1;
+            margin-right: auto;
+        }
+        .input-area {
+            display: flex;
+            gap: 10px;
+        }
+        .input-area input {
+            flex: 1;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+        }
+        .input-area button {
+            padding: 10px 20px;
+            background-color: #2c3e50;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+        .input-area button:hover {
+            background-color: #34495e;
+        }
+        .record-button {
+            background-color: #e74c3c;
+        }
+        .record-button.recording {
+            background-color: #c0392b;
+        }
+    </style>
 </head>
 <body>
-    <div class="chat-container">
-        <div class="chat-header">
-            <h1>DeepSeek Chat</h1>
-        </div>
+    <!-- 左侧边栏 -->
+    <div class="sidebar">
+        <h2>功能菜单</h2>
+        <ul>
+            <li>设置</li>
+            <li>历史记录</li>
+            <li>帮助</li>
+        </ul>
+    </div>
+
+    <!-- 主内容区 -->
+    <div class="main-content">
+        <!-- 对话记录 -->
         <div class="chat-history" id="chat-history">
-            <!-- 聊天记录会动态加载到这里 -->
+            <div class="message bot-message">你好！我是你的语音助手，请问有什么可以帮您？</div>
         </div>
-        <div class="chat-input">
-            <input type="text" id="user-input" placeholder="输入消息或按下语音按钮">
-            <button id="voice-btn">🎤</button>
-            <button id="send-btn">发送</button>
+
+        <!-- 输入区域 -->
+        <div class="input-area">
+            <input type="text" id="user-input" placeholder="输入消息">
+            <button onclick="sendMessage()">发送</button>
+            <button id="record-button" class="record-button" onclick="toggleRecording()">录音</button>
         </div>
     </div>
-    <script src="../static/js/script.js"></script>
+
+    <script>
+        let isRecording = false;
+        let mediaRecorder;
+        let audioChunks = [];
+
+        // 发送消息
+        async function sendMessage() {
+            const input = document.getElementById('user-input');
+            const userMessage = input.value.trim();
+            if (!userMessage) return;
+
+            // 添加用户消息到对话记录
+            const chatHistory = document.getElementById('chat-history');
+            chatHistory.innerHTML += `<div class="message user-message">${userMessage}</div>`;
+            input.value = '';
+
+            // 发送到后端
+            const response = await fetch('/send_message', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ message: userMessage })
+            });
+            const data = await response.json();
+
+            // 添加AI响应到对话记录
+            chatHistory.innerHTML += `<div class="message bot-message">${data.response}</div>`;
+            chatHistory.scrollTop = chatHistory.scrollHeight;
+        }
+
+        // 切换录音状态
+        async function toggleRecording() {
+            const recordButton = document.getElementById('record-button');
+            if (!isRecording) {
+                // 开始录音
+                audioChunks = [];
+                const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+                mediaRecorder = new MediaRecorder(stream);
+                mediaRecorder.ondataavailable = (event) => {
+                    audioChunks.push(event.data);
+                };
+                mediaRecorder.onstop = async () => {
+                    const audioBlob = new Blob(audioChunks, { type: 'audio/wav' });
+                    const formData = new FormData();
+                    formData.append('audio', audioBlob, 'recording.wav');
+
+                    // 上传音频文件
+                    const response = await fetch('/upload_audio', {
+                        method: 'POST',
+                        body: formData
+                    });
+                    const data = await response.json();
+                    document.getElementById('user-input').value = data.text;
+                };
+                mediaRecorder.start();
+                recordButton.classList.add('recording');
+                recordButton.textContent = '停止录音';
+            } else {
+                // 停止录音
+                mediaRecorder.stop();
+                recordButton.classList.remove('recording');
+                recordButton.textContent = '录音';
+            }
+            isRecording = !isRecording;
+        }
+    </script>
 </body>
 </html>

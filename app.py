@@ -1,48 +1,60 @@
 from flask import Flask, render_template, request, jsonify
+import threading
+import pyaudio
+import keyboard
 from core import Core
-import base64
+from stt import STT
+import tempfile
 import wave
-import io
 
 app = Flask(__name__)
 
 # 初始化核心模块
 core = Core()
+stt = STT()  # 必须初始化，否则无法运行
+audio = pyaudio.PyAudio()
 
+# 全局变量
+history = core.get_in_prompt()  # 初始化 history
+input_lock = threading.Lock()
+recording_complete = threading.Event()
+
+# 首页路由
 @app.route('/')
 def index():
     return render_template('index.html')
 
-@app.route('/chat', methods=['POST'])
-def chat():
+# 处理用户输入
+@app.route('/send_message', methods=['POST'])
+def send_message():
+    global history  # 使用全局的 history 变量
     data = request.json
     user_input = data.get('message')
-    audio_data = data.get('audio_data')
 
-    if audio_data:
-        # 解码音频数据
-        audio_bytes = base64.b64decode(audio_data.split(',')[1])
-        # 将音频数据保存为临时文件
-        with io.BytesIO(audio_bytes) as audio_file:
-            with wave.open(audio_file, 'wb') as wf:
-                wf.setnchannels(1)
-                wf.setsampwidth(2)
-                wf.setframerate(16000)
-                wf.writeframes(audio_file.read())
-            # 语音转文字
-            user_input = core.transcribe_audio(audio_file.getvalue())
+    if user_input.lower() == 'exit':
+        return jsonify({'response': '会话已结束'})
 
     # 生成响应
-    history = core.get_in_prompt()
-    response_text = core.generate_response(history, user_input)
-
-    # 语音播放
+    response_text, history = core.generate_response(history, user_input)
+    # todo 尝试修改为先返回再播放
     core.synthesize_and_play(response_text)
+    # ! 这行好像用不了
+    # core.system_control(response_text)
 
-    return jsonify({
-        'user_input': user_input,
-        'response': response_text
-    })
+    return jsonify({'response': response_text})
+
+# 处理音频上传
+@app.route('/upload_audio', methods=['POST'])
+def upload_audio():
+    if 'audio' not in request.files:
+        return jsonify({'error': 'No audio file uploaded'}), 400
+
+    audio_file = request.files['audio']
+    with tempfile.NamedTemporaryFile(suffix='.wav', delete=False) as tmpfile:
+        audio_file.save(tmpfile.name)
+        # 调用语音转文字
+        text = core.transcribe_audio(tmpfile.name)
+        return jsonify({'text': text})
 
 if __name__ == '__main__':
     app.run(debug=True)
