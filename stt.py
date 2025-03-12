@@ -23,34 +23,52 @@ class STT():
         self.RATE = 16000              # 采样率
         self.CHUNK = 1024              # 每个数据块包含的帧数
 
-    def save_and_transcribe(self, frames):
-        # 保存录音到临时文件并进行语音转文字
-        with tempfile.NamedTemporaryFile(suffix='.wav', delete=False) as tmpfile:
-            wave_file = wave.open(tmpfile.name, 'wb')
-            wave_file.setnchannels(self.CHANNELS)
-            wave_file.setsampwidth(pyaudio.PyAudio().get_sample_size(self.FORMAT))
-            wave_file.setframerate(self.RATE)
-            wave_file.writeframes(b''.join(frames))
-            wave_file.close()
+    # backup
+    # def save_and_transcribe(self, frames):
+    #     # 保存录音到临时文件并进行语音转文字
+    #     with tempfile.NamedTemporaryFile(suffix='.wav', delete=False) as tmpfile:
+    #         wave_file = wave.open(tmpfile.name, 'wb')
+    #         wave_file.setnchannels(self.CHANNELS)
+    #         wave_file.setsampwidth(pyaudio.PyAudio().get_sample_size(self.FORMAT))
+    #         wave_file.setframerate(self.RATE)
+    #         wave_file.writeframes(b''.join(frames))
+    #         wave_file.close()
 
-            # 语音转文字
-            response = self.model.generate(
-                input=tmpfile.name,
-                cache={},
-                language='auto',
-                use_itn=True,
-                batch_size_s=60,
-                merge_vad=True,
-                merge_length_s=15,
-            )
-            # 获取返回结果
-            text = rich_transcription_postprocess(response[0]['text'])
-            print('识别结果:', text)
-            return text
+    #         # 语音转文字
+    #         response = self.model.generate(
+    #             input=tmpfile.name,
+    #             cache={},
+    #             language='auto',
+    #             use_itn=True,
+    #             batch_size_s=60,
+    #             merge_vad=True,
+    #             merge_length_s=15,
+    #         )
+    #         # 获取返回结果
+    #         text = rich_transcription_postprocess(response[0]['text'])
+    #         print('识别结果:', text)
+    #         return text
+
+    def save_and_transcribe(self, audio_path):
+        # 语音转文字
+        response = self.model.generate(
+            input=audio_path,
+            cache={},
+            language='auto',
+            use_itn=True,
+            batch_size_s=60,
+            merge_vad=True,
+            merge_length_s=15,
+        )
+        # 获取返回结果
+        text = rich_transcription_postprocess(response[0]['text'])
+        print('识别结果:', text)
+        return text
 
 
 if __name__ == '__main__':
     # demo 此处仅用于测试
+    # ! 312重置后不能使用，有空再改
     stt = STT()
     # 录音设置 # todo 存在重复，以后再优化
     FORMAT = pyaudio.paInt16  # 16位音频格式

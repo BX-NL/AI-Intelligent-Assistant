@@ -3,6 +3,8 @@ import time
 import keyboard
 import pyaudio
 import threading
+import tempfile
+import wave
 # import uvicorn
 from fastapi import FastAPI
 from funasr import AutoModel
@@ -81,7 +83,22 @@ def main():
                         print('录音结束')
                         # 标记录音状态
                         is_recording = False
-                        break
+                        with input_lock:
+                            with tempfile.NamedTemporaryFile(suffix='.wav', delete=False) as tmpfile:
+                                wave_file = wave.open(tmpfile.name, 'wb')
+                                wave_file.setnchannels(CHANNELS)
+                                wave_file.setsampwidth(audio.get_sample_size(FORMAT))
+                                wave_file.setframerate(RATE)
+                                wave_file.writeframes(b''.join(frames))
+                                wave_file.close()
+                            # 语音转文字
+                                text = core.transcribe_audio(tmpfile.name)
+                            # text = core.transcribe_audio(frames)
+                            print('get:', text)
+                            # 解除进程锁，标记录音完成
+                            recording_complete.set()
+                        # || 这个break不知道干啥用的，先标记一下
+                        # break
 
                 # 判断是否录音成功
                 if is_recording and stream is not None:
@@ -97,12 +114,8 @@ def main():
             # 终止录音，关闭麦克风
             audio.terminate()
 
-        with input_lock:
-            # 语音转文字
-            text = core.transcribe_audio(frames)
-            print('get:', text)
-            # 解除进程锁，标记录音完成
-            recording_complete.set()
+        
+        
 
     # 文本输入
     def listen_for_text():
@@ -127,7 +140,7 @@ def main():
 
     # 开始
     while not exit_program:
-        print('输入文本或按下F7开始语音输入')
+        print('输入文本或按下', hotkey, '开始语音输入')
         # 进程锁
         recording_complete.wait()
         recording_complete.clear()
@@ -138,7 +151,7 @@ def main():
             break
 
         # 模型生成响应
-        response_text = core.generate_response(history, text)
+        response_text, history = core.generate_response(history, text)
         print('AI 响应:', response_text)
 
         # 文本转语音并播放

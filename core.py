@@ -20,13 +20,13 @@ class Core:
         self.control = Control()
         pass
 
-    # 该接口已弃用
-    def record_audio(self):
-        frames = self.stt.record_audio()
-        return frames
+    # backup
+    # def transcribe_audio(self, frames):
+    #     text = self.stt.save_and_transcribe(frames)
+    #     return text
 
-    def transcribe_audio(self, frames):
-        text = self.stt.save_and_transcribe(frames)
+    def transcribe_audio(self, audio_path):
+        text = self.stt.save_and_transcribe(audio_path)
         return text
 
     def get_in_prompt(self):
@@ -34,8 +34,10 @@ class Core:
         return history
 
     def generate_response(self, history, text):
+        if not text:
+            text = '继续'
         response, self.history = self.model.generate(history, text)
-        return response
+        return response, self.history
 
     def synthesize_and_play(self, text):
         self.tts.synthesize_and_play(text)

@@ -47,8 +47,8 @@ class Model:
         for chunk in response:
             text = chunk.choices[0].delta.content
             new_message = new_message + text
-            print(text)
-        # print(new_message)
+            # print(text)
+        print(new_message)
         # 记录历史信息
         history.append({'role': 'assistant', 'content': new_message})
         # print(history)

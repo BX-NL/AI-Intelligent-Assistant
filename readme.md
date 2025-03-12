@@ -67,6 +67,8 @@ uvicorn main:app --reload
 
 2025-03-11 完善代码及注释
 
+2025-03-12 重置前端部分、修改部分代码
+
 ### templates
 
 [ChatGLM3](https://github.com/THUDM/ChatGLM3)
