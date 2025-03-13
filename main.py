@@ -64,41 +64,50 @@ def main():
         stream = None
         # 标记录音状态
         is_recording = False
+        # 初始化按键时长
+        last_press_time = 0
+        # 按键冷却时间
+        debounce_time = 0.5
 
         try:
             while not exit_program:
-                # 判断按下快捷键开始或停止录音 # ! 按下按键时间过长会导致开始与结束被同时触发，有空再修
+                # 判断按下快捷键开始或停止录音
                 if keyboard.is_pressed(hotkey=hotkey):
-                    if not is_recording:
-                        # 开始录音
-                        print('开始录音')
-                        # 标记录音状态
-                        is_recording = True
-                        # 开始记录音频流
-                        stream = audio.open(format=FORMAT, channels=CHANNELS, rate=RATE, input=True, frames_per_buffer=CHUNK)
-                        # 清空上一次录音留下的音频帧
-                        frames = []
-                    else:
-                        # 结束录音
-                        print('录音结束')
-                        # 标记录音状态
-                        is_recording = False
-                        with input_lock:
-                            with tempfile.NamedTemporaryFile(suffix='.wav', delete=False) as tmpfile:
-                                wave_file = wave.open(tmpfile.name, 'wb')
-                                wave_file.setnchannels(CHANNELS)
-                                wave_file.setsampwidth(audio.get_sample_size(FORMAT))
-                                wave_file.setframerate(RATE)
-                                wave_file.writeframes(b''.join(frames))
-                                wave_file.close()
-                            # 语音转文字
-                                text = core.transcribe_audio(tmpfile.name)
-                            # text = core.transcribe_audio(frames)
-                            print('get:', text)
-                            # 解除进程锁，标记录音完成
-                            recording_complete.set()
-                        # || 这个break不知道干啥用的，先标记一下
-                        # break
+                    # 按键冷却，避免误触
+                    current_time = time.time()
+                    if current_time - last_press_time > debounce_time:
+                        last_press_time = current_time
+                        
+                        if not is_recording:
+                            # 开始录音
+                            print('开始录音')
+                            # 标记录音状态
+                            is_recording = True
+                            # 开始记录音频流
+                            stream = audio.open(format=FORMAT, channels=CHANNELS, rate=RATE, input=True, frames_per_buffer=CHUNK)
+                            # 清空上一次录音留下的音频帧
+                            frames = []
+                        else:
+                            # 结束录音
+                            print('录音结束')
+                            # 标记录音状态
+                            is_recording = False
+                            with input_lock:
+                                with tempfile.NamedTemporaryFile(suffix='.wav', delete=False) as tmpfile:
+                                    wave_file = wave.open(tmpfile.name, 'wb')
+                                    wave_file.setnchannels(CHANNELS)
+                                    wave_file.setsampwidth(audio.get_sample_size(FORMAT))
+                                    wave_file.setframerate(RATE)
+                                    wave_file.writeframes(b''.join(frames))
+                                    wave_file.close()
+                                # 语音转文字
+                                    text = core.transcribe_audio(tmpfile.name)
+                                # text = core.transcribe_audio(frames)
+                                print('get:', text)
+                                # 解除进程锁，标记录音完成
+                                recording_complete.set()
+                            # || 这个break不知道干啥用的，先标记一下
+                            # break
 
                 # 判断是否录音成功
                 if is_recording and stream is not None:
