@@ -1,10 +1,26 @@
 # 基于ChatGLM的语音交互型人工智能助理的设计与实现
 
-pip install requirement.txt
+## 111
 
-pip3 install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu124
+demo
 
-uvicorn main:app --reload
+### 安装依赖
+
+    pip install requirement.txt
+
+### 根据自己的cuda版本修改链接，后面会尝试增加cpu版本
+
+    pip3 install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu124
+
+### 运行
+
+命令行模式 CLI
+
+    python main.py
+
+网页模式 Web-UI
+
+    python app.py
 
 ### 已知bug
 
@@ -13,18 +29,21 @@ uvicorn main:app --reload
 1.默认的快捷键F7会触发CMD的功能：历史输入，不影响使用，有空再处理，可在setting.yaml中修改快捷键
 
 ### Tree
+    app.py
+    config.py
+    control.py
     core.py
     main.py
-    model_online.py
     model_offline.py
+    model_online.py
+    readme.md
+    setting.yaml
     stt.py
     tts.py
-    control.py
-    config.py
-    setting.yaml
-    app.py
+
     templates/
         index.html
+        chat.html
     static/
         css/
             style.css
@@ -68,6 +87,8 @@ uvicorn main:app --reload
 2025-03-11 完善代码及注释
 
 2025-03-12 重置前端部分、修改部分代码
+
+2025-03-13 修复部分问题，新增网站主页，改了一些乱七八糟的东西
 
 ### templates
 
