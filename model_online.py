@@ -12,8 +12,11 @@ class Model:
         self.api_key = self.setting.model('zhipuAI_API_key')
         # test api_key
         if self.api_key == '':
-            with open("api_key.txt", "r") as f:
-                self.api_key = f.readline()
+            try:
+                with open("api_key.txt", "r") as f:
+                    self.api_key = f.readline()
+            except:
+                print('缺少api_key')
         # 智普清言的模型选用
         self.model = self.setting.model('zhipuAI_model')
         # 设置连接
