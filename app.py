@@ -19,10 +19,18 @@ history = core.get_in_prompt()  # 初始化 history
 input_lock = threading.Lock()
 recording_complete = threading.Event()
 
+
 # 首页路由
 @app.route('/')
-def index():
+def home():
     return render_template('index.html')
+
+
+# 聊天页面路由
+@app.route('/chat')
+def chat():
+    return render_template('chat.html')
+
 
 # 处理用户输入
 @app.route('/send_message', methods=['POST'])
@@ -43,6 +51,7 @@ def send_message():
 
     return jsonify({'response': response_text})
 
+
 # 处理音频上传
 @app.route('/upload_audio', methods=['POST'])
 def upload_audio():
@@ -55,6 +64,22 @@ def upload_audio():
         # 调用语音转文字
         text = core.transcribe_audio(tmpfile.name)
         return jsonify({'text': text})
+
+
+# 获取模块状态
+@app.route('/get_status', methods=['GET'])
+def get_status():
+    # 模拟模块状态
+    status = {
+        'module1': '运行中',
+        'module2': '运行中',
+        'module3': '运行中',
+        'module4': '运行中',
+        'module5': '运行中',
+        'module6': '运行中',
+    }
+    return jsonify(status)
+
 
 if __name__ == '__main__':
     app.run(debug=True)
