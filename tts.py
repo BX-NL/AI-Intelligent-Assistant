@@ -34,9 +34,11 @@ class TTS:
 
     def synthesize_and_play(self, text):
         # 异步合成语音
-        loop = asyncio.new_event_loop()
-        asyncio.set_event_loop(loop)
-        audio_data = loop.run_until_complete(self.synthesize(text))
+        # loop = asyncio.new_event_loop()
+        # asyncio.set_event_loop(loop)
+        # audio_data = loop.run_until_complete(self.synthesize(text))
+
+        audio_data = asyncio.run(self.synthesize(text))
 
         # 将音频数据保存到临时文件
         with tempfile.NamedTemporaryFile(suffix='.mp3', delete=False) as tmpfile:
@@ -48,3 +50,38 @@ class TTS:
         # 使用 playsound 播放音频
         # 可换pygame库避免临时文件
         playsound(tmpfile_path)
+
+if __name__ == '__main__':
+    from fastapi import FastAPI, HTTPException
+    from pydantic import BaseModel
+
+    # 定义请求体模型
+    class TTSRequest(BaseModel):
+        text: str
+
+    app = FastAPI()
+    # 创建 TTS 实例
+    tts = TTS()
+
+    @app.post("/tts")
+    async def synthesize_and_play_api(request: TTSRequest):
+        try:
+            # 异步合成语音
+            text = request.text
+            audio_data = await tts.synthesize(text)
+            # todo 为了分布式进行的妥协，后续尝试不用playsound，异步套异步会报错
+            # 将音频数据保存到临时文件
+            with tempfile.NamedTemporaryFile(suffix='.mp3', delete=False) as tmpfile:
+                tmpfile.write(audio_data)
+                tmpfile_path = tmpfile.name
+                # 等待0.5秒避免文件未写入完成
+                time.sleep(0.5)
+
+            # 使用 playsound 播放音频
+            playsound(tmpfile_path)
+            return {"message": "语音播放成功"}
+        except Exception as e:
+            raise HTTPException(status_code=500, detail=str(e))
+
+    import uvicorn
+    uvicorn.run(app, host="127.0.0.1", port=8501)
