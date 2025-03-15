@@ -1,12 +1,14 @@
 from transformers import AutoTokenizer, AutoModel
 from cpm_kernels.kernels.base import round_up
 import time
-import config
+# import config
+from module.config import setting
 
 class Model():
     def __init__(self):
         # 系统设置
-        self.setting = config.setting()
+        # self.setting = config.setting()
+        self.setting = setting()
         # 本地模型路径
         model_path = self.setting.model('model_path')
         # 预设的提示词

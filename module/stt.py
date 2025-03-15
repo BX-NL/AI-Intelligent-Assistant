@@ -4,7 +4,8 @@ import keyboard
 import tempfile
 from funasr import AutoModel
 from funasr.utils.postprocess_utils import rich_transcription_postprocess
-import config
+# import config
+from module.config import setting
 
 
 class STT():
@@ -77,7 +78,7 @@ if __name__ == '__main__':
     CHUNK = 1024              # 每个数据块包含的帧数
 
     # 系统设置
-    hotkey = config.setting().STT('hotkey')
+    hotkey = setting().STT('hotkey')
 
     # 录音功能，按下指定按键开始和结束录音
     audio = pyaudio.PyAudio()

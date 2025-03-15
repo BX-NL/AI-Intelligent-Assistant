@@ -1,5 +1,6 @@
 import requests
-import config
+# import config
+from module.config import setting
 import time
 from zhipuai import ZhipuAI
 
@@ -7,7 +8,8 @@ from zhipuai import ZhipuAI
 class Model:
     def __init__(self):
         # 系统设置
-        self.setting = config.setting()
+        # self.setting = config.setting()
+        self.setting = setting()
         # 智普清言的APIkey
         self.api_key = self.setting.model('zhipuAI_API_key')
         # test api_key
