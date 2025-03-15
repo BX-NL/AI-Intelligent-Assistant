@@ -143,8 +143,8 @@ def main():
                 exit_program = True
                 break
             with input_lock:
-                text = user_input
-                print('用户输入:', text)
+                user_messsage = user_input
+                print('用户输入:', user_messsage)
                 # 解除进程锁，标记文本输入完成
                 recording_complete.set()
 
