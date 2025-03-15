@@ -92,6 +92,8 @@ demo
 
 2025-03-14 调整部分代码，为文本转语音增加分布式
 
+2025-03-15 规范模块的debug和api功能
+
 ### templates
 
 [ChatGLM3](https://github.com/THUDM/ChatGLM3)

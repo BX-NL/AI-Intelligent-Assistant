@@ -27,7 +27,7 @@ class TTS:
         async for chunk in communicate.stream():
             if chunk["type"] == "audio":
                 audio_data.write(chunk["data"])
-        
+
         stream = audio_data.getvalue()
 
         return stream
@@ -51,7 +51,13 @@ class TTS:
         # 可换pygame库避免临时文件
         playsound(tmpfile_path)
 
-if __name__ == '__main__':
+def debug():
+    tts = TTS()
+    text = input('input')
+    tts.synthesize_and_play(text)
+    print('output')
+
+def api():
     from fastapi import FastAPI, HTTPException
     from pydantic import BaseModel
 
@@ -85,3 +91,9 @@ if __name__ == '__main__':
 
     import uvicorn
     uvicorn.run(app, host="127.0.0.1", port=8501)
+
+if __name__ == '__main__':
+    if True:
+        api()
+    else:
+        debug()
