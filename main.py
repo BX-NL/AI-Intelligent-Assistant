@@ -33,7 +33,7 @@ def main():
     history = core.get_in_prompt()
 
     # 存储用户输入的文本
-    text = ''
+    user_messsage = ''
     # 判断是否退出 # todo 这个可能要改
     exit_program = False
     # 进程锁，用于锁定输入
@@ -56,7 +56,7 @@ def main():
     # 录音输入
     def hotkey_to_record():
 
-        nonlocal text, exit_program
+        nonlocal user_messsage, exit_program
 
         # 音频帧
         frames = []
@@ -129,7 +129,7 @@ def main():
     # 文本输入
     def listen_for_text():
         # 监听用户输入的文本
-        nonlocal text, exit_program
+        nonlocal user_messsage, exit_program
         while not exit_program:
             # 使用 keyboard 监听实时输入
             user_input = input()
@@ -155,20 +155,20 @@ def main():
         recording_complete.clear()
 
         # 可输入exit退出
-        if text.lower() == 'exit':
+        if user_messsage.lower() == 'exit':
             print('退出程序')
             break
 
         # 模型生成响应
-        response_text, history = core.generate_response(history, text)
-        print('AI 响应:', response_text)
+        new_message, history = core.generate_response(history, user_messsage)
+        print('大模型回复:', new_message)
 
         # 文本转语音并播放
-        core.synthesize_and_play(response_text)
+        core.synthesize_and_play(new_message)
         print('语音播放完成。')
 
         # 执行命令
-        core.system_control(response_text)
+        core.system_control(new_message)
         print('指令执行完毕')
 
 # todo 留个坑位做分布式和前端

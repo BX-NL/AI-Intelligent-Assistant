@@ -24,7 +24,7 @@ class Model:
 
         # 预设的提示词
         prompt = self.setting.model('prompt')
-        # 输入的格式
+        # 输入的格式 # todo 可以考虑做长期记忆
         self.messages = [
             {'role': 'system', 'content': prompt},
             # {'role': 'user', 'content': '从现在开始，我的名字是Ninglog，你将作为我的个人语音助理，如果你明白以上规则，请回复:我明白了。'},
@@ -49,26 +49,28 @@ class Model:
         history.append({'role': 'user', 'content': user_message})
         # 传入用户输入的文本并获取回复
         response = self.client.chat.completions.create(model=self.model, messages=history, stream=True)
-        # print(response)
         # 流式输出 # todo 先占个坑位，万一用得上
         for chunk in response:
             text = chunk.choices[0].delta.content
             new_message = new_message + text
             # print(text)
-        print(new_message)
         # 记录历史信息
         history.append({'role': 'assistant', 'content': new_message})
-        # print(history)
         return new_message, history
 
-
-if __name__ == '__main__':
+def debug():
     model = Model()
     history = model.in_prompt()
-    # print(history)
     while True:
         user_message = str(input('输入文本：'))
         new_message = model.generate(history, user_message)
+        print(new_message)
+
+if __name__ == '__main__':
+    if False:
+        api()
+    else:
+        debug()
 
 
 # demo 本地部署API用法，可用于分布式，有空再研究

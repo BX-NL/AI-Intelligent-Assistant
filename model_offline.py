@@ -31,15 +31,15 @@ class Model():
         print('用时', time.time()-start_time, '秒')
         return history
 
-    def generate(self, history, text):
+    def generate(self, history, user_message):
         print('推理中')
         # 记录推理时间
         start_time = time.time()
         # 传入用户输入的文本并获取回复
-        response, history = self.model.chat(self.tokenizer, text, history=history)
-        # print(response)
+        response, history = self.model.chat(self.tokenizer, user_message, history=history)
+        new_message = response
         print('用时', time.time()-start_time, '秒')
-        return response, history
+        return new_message, history
     
 if __name__ == '__mian__':
     pass
