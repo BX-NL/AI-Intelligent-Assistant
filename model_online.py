@@ -32,7 +32,7 @@ class Model:
             # {'role': 'user', 'content': '请介绍一下你自己。'},
         ]
 
-    # 注入提示词
+    # 注入提示词 # todo 增加问候语，这print太假了
     def in_prompt(self):
         print('提示词注入中')
         start_time = time.time()
@@ -58,16 +58,49 @@ class Model:
         history.append({'role': 'assistant', 'content': new_message})
         return new_message, history
 
+
 def debug():
     model = Model()
     history = model.in_prompt()
     while True:
         user_message = str(input('输入文本：'))
-        new_message = model.generate(history, user_message)
+        new_message, history = model.generate(history, user_message)
         print(new_message)
 
+def api():
+    from fastapi import FastAPI, HTTPException
+    from pydantic import BaseModel
+
+    # 定义请求体模型
+    class ModelRequest(BaseModel):
+        history: list
+        user_message: str
+
+    app = FastAPI()
+    # 创建 Model 实例
+    model = Model()
+
+    @app.get('/model')
+    def in_prompt_api():
+        history = model.in_prompt()
+        return {'history': history}
+
+    @app.post('/model')
+    async def generate_api(request: ModelRequest):
+        history = request.history
+        user_message = request.user_message
+        try:
+            new_message, history = model.generate(history, user_message)
+            return {'new_message': new_message, 'history': history}
+
+        except Exception as e:
+            raise HTTPException(status_code=500, detail=str(e))
+
+    import uvicorn
+    uvicorn.run(app, host="127.0.0.1", port=8502)
+
 if __name__ == '__main__':
-    if False:
+    if True:
         api()
     else:
         debug()
