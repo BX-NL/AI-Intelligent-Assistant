@@ -31,18 +31,14 @@ demo
 2.Flask后端app.py中启动应用时，当debug值为True时，各模块会被实例化两次，暂不影响使用，实际部署时可改为False
 
 ### Tree
-    app.py
-    config.py
-    control.py
-    core.py
-    main.py
-    model_offline.py
-    model_online.py
-    readme.md
-    setting.yaml
-    stt.py
-    tts.py
-
+    module/
+        config.py
+        control.py
+        core.py
+        model_offline.py
+        model_online.py
+        stt.py
+        tts.py
     templates/
         index.html
         chat.html
@@ -51,6 +47,10 @@ demo
             style.css
         js/
             script.js
+    main.py
+    app.py
+    readme.md
+    setting.yaml
 
 ### changlog
 
