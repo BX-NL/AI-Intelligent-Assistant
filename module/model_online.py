@@ -1,9 +1,19 @@
 import requests
 # import config
-from module.config import setting
 import time
 from zhipuai import ZhipuAI
+import os
+import sys
 
+# demo 模块单独运行时找不到module就用这几行
+# 获取当前文件的绝对路径
+current_dir = os.path.dirname(os.path.abspath(__file__))
+# 获取项目根目录
+work_dir = os.path.dirname(current_dir)
+# 将项目根目录添加到sys.path
+sys.path.append(work_dir)
+# 导入模块
+from module.config import setting
 
 class Model:
     def __init__(self):

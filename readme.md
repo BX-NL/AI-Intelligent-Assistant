@@ -98,6 +98,8 @@ demo
 
 2025-03-15-Alpha 新增Alpha分支，重建代码结构，尝试整合各模块
 
+2025-03-15-Alpha 修复几个因迁移导致的bug
+
 ### templates
 
 [ChatGLM3](https://github.com/THUDM/ChatGLM3)
