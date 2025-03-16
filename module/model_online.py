@@ -1,15 +1,27 @@
 import requests
-import config
+# import config
 import time
 from zhipuai import ZhipuAI
+import os
+import sys
 
+# demo 模块单独运行时找不到module就用这几行
+# 获取当前文件的绝对路径
+current_dir = os.path.dirname(os.path.abspath(__file__))
+# 获取项目根目录
+work_dir = os.path.dirname(current_dir)
+# 将项目根目录添加到sys.path
+sys.path.append(work_dir)
+# 导入模块
+from module.config import setting
 
 class Model:
     def __init__(self):
         # 系统设置
-        self.setting = config.setting()
+        # self.setting = config.setting()
+        self.setting = setting()
         # 智普清言的APIkey
-        self.api_key = self.setting.model('zhipuAI_API_key')
+        self.api_key = self.setting.get('zhipuAI_API_key')
         # test api_key
         if self.api_key == '':
             try:
@@ -18,12 +30,12 @@ class Model:
             except:
                 print('缺少api_key')
         # 智普清言的模型选用
-        self.model = self.setting.model('zhipuAI_model')
+        self.model = self.setting.get('zhipuAI_model')
         # 设置连接
         self.client = ZhipuAI(api_key=self.api_key)
 
         # 预设的提示词
-        prompt = self.setting.model('prompt')
+        prompt = self.setting.get('prompt')
         # 输入的格式 # todo 可以考虑做长期记忆
         self.messages = [
             {'role': 'system', 'content': prompt},

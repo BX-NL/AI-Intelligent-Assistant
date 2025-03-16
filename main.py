@@ -8,10 +8,14 @@ import wave
 # import uvicorn
 from fastapi import FastAPI
 from funasr import AutoModel
-import config
-from core import Core
-from stt import STT
-
+# import config
+# from core import Core
+# from stt import STT
+from module.core import Core
+from module.stt import STT
+from module.tts import TTS
+from module.config import setting
+from module.control import Control
 
 def print_welcome():
     pass
@@ -49,9 +53,10 @@ def main():
     CHUNK = 1024
 
     # 读取系统设置
-    setting = config.setting()
+    # setting = config.setting()
+    # setting = setting()
     # 读取系统设置，快捷键
-    hotkey = setting.STT('hotkey')
+    hotkey = setting().get('hotkey')
 
     # 录音输入
     def hotkey_to_record():
@@ -138,8 +143,8 @@ def main():
                 exit_program = True
                 break
             with input_lock:
-                text = user_input
-                print('用户输入:', text)
+                user_messsage = user_input
+                print('用户输入:', user_messsage)
                 # 解除进程锁，标记文本输入完成
                 recording_complete.set()
 

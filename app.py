@@ -2,8 +2,13 @@ from flask import Flask, render_template, request, jsonify
 import threading
 import pyaudio
 import keyboard
-from core import Core
-from stt import STT
+# from core import Core
+# from stt import STT
+from module.core import Core
+from module.stt import STT
+from module.tts import TTS
+from module.config import setting
+from module.control import Control
 import tempfile
 import wave
 
@@ -82,4 +87,5 @@ def get_status():
 
 
 if __name__ == '__main__':
+    # ! 当debug =True时，各个模块会被实例化两次，暂不影响使用，实际部署时可改为False
     app.run(debug=True)

@@ -1,8 +1,8 @@
 # 基于ChatGLM的语音交互型人工智能助理的设计与实现
 
-## 111
+## 介绍
 
-demo
+这是一段介绍
 
 ### 安装依赖
 
@@ -22,25 +22,29 @@ demo
 
     python app.py
 
+分布式部署模式
+
+    # 单独运行各模块
+    python [module].py
+    # 考虑加个脚本处理
+
 ### 已知bug
 
 0.大量功能写成一坨，~~趁着还能看明白赶紧改了~~
 
 1.默认的快捷键F7会触发CMD的功能：历史输入，不影响使用，有空再处理，可在setting.yaml中修改快捷键
 
-### Tree
-    app.py
-    config.py
-    control.py
-    core.py
-    main.py
-    model_offline.py
-    model_online.py
-    readme.md
-    setting.yaml
-    stt.py
-    tts.py
+2.Flask后端app.py中启动应用时，当debug值为True时，各模块会被实例化两次，暂不影响使用，实际部署时可改为False
 
+### Tree
+    module/
+        config.py
+        control.py
+        core.py
+        model_offline.py
+        model_online.py
+        stt.py
+        tts.py
     templates/
         index.html
         chat.html
@@ -49,6 +53,10 @@ demo
             style.css
         js/
             script.js
+    main.py
+    app.py
+    readme.md
+    setting.yaml
 
 ### changlog
 
@@ -93,6 +101,12 @@ demo
 2025-03-14 调整部分代码，为文本转语音增加分布式
 
 2025-03-15 规范模块的debug和api功能，规范代码结构，为在线大模型增加分布式
+
+2025-03-15-Alpha 新增Alpha分支，重建代码结构，尝试整合各模块
+
+2025-03-16-Alpha 修复几个因迁移导致的bug，调整prompt，重写设置
+
+2025-03-16 确认正常，开始合并分支
 
 ### templates
 

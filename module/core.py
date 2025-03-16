@@ -1,12 +1,18 @@
-from stt import STT
-from tts import TTS
-import config
-from control import Control
+# from stt import STT
+# from tts import TTS
+# import config
+# from control import Control
+from module.stt import STT
+from module.tts import TTS
+from module.config import setting
+from module.control import Control
 
-if config.setting().main('LLM') == 'offline':
-    from model_offline import Model
-elif config.setting().main('LLM') == 'online':
-    from model_online import Model
+if setting().get('LLM') == 'offline':
+    # from model_offline import Model
+    from module.model_offline import Model
+elif setting().get('LLM') == 'online':
+    # from model_online import Model
+    from module.model_online import Model
 else:
     print('大模型加载失败')
 
