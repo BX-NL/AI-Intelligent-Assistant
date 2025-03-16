@@ -3,22 +3,14 @@ import yaml
 
 class setting():
     def __init__(self):
-        with open('./setting.yaml', 'r', encoding='utf-8') as f:
-            self.setting = yaml.load(f.read(), Loader=yaml.FullLoader)
+        with open('./setting.yaml', 'r', encoding='utf-8') as file:
+            self.setting = yaml.load(file.read(), Loader=yaml.FullLoader)
+            file.close()
         pass
 
-    def main(self, key):
-        return (self.setting[key])
 
-    def model(self, key):
+    def get(self, key):
         return (self.setting[key])
-
-    def TTS(self, key):
-        pass
-
-    def STT(self, key):
-        return (self.setting[key])
-        pass
 
 
 class debug():
@@ -28,5 +20,5 @@ class debug():
 
 if __name__ == '__main__':
     # demo demo
-    key = 'prompt'
-    print(setting().main(key))
+    key = 'debug'
+    print(setting().get(key))

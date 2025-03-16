@@ -10,9 +10,9 @@ class Model():
         # self.setting = config.setting()
         self.setting = setting()
         # 本地模型路径
-        model_path = self.setting.model('model_path')
+        model_path = self.setting.get('model_path')
         # 预设的提示词
-        self.prompt = self.setting.model('prompt')
+        self.prompt = self.setting.get('prompt')
         # tokenizer.py，原理暂不明确
         self.tokenizer = AutoTokenizer.from_pretrained(model_path, trust_remote_code=True)
         # int4量化测试可用

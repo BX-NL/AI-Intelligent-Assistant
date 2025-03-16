@@ -21,7 +21,7 @@ class Model:
         # self.setting = config.setting()
         self.setting = setting()
         # 智普清言的APIkey
-        self.api_key = self.setting.model('zhipuAI_API_key')
+        self.api_key = self.setting.get('zhipuAI_API_key')
         # test api_key
         if self.api_key == '':
             try:
@@ -30,12 +30,12 @@ class Model:
             except:
                 print('缺少api_key')
         # 智普清言的模型选用
-        self.model = self.setting.model('zhipuAI_model')
+        self.model = self.setting.get('zhipuAI_model')
         # 设置连接
         self.client = ZhipuAI(api_key=self.api_key)
 
         # 预设的提示词
-        prompt = self.setting.model('prompt')
+        prompt = self.setting.get('prompt')
         # 输入的格式 # todo 可以考虑做长期记忆
         self.messages = [
             {'role': 'system', 'content': prompt},

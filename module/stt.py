@@ -78,7 +78,7 @@ if __name__ == '__main__':
     CHUNK = 1024              # 每个数据块包含的帧数
 
     # 系统设置
-    hotkey = setting().STT('hotkey')
+    hotkey = setting().get('hotkey')
 
     # 录音功能，按下指定按键开始和结束录音
     audio = pyaudio.PyAudio()

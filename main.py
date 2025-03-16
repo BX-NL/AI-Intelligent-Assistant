@@ -56,7 +56,7 @@ def main():
     # setting = config.setting()
     # setting = setting()
     # 读取系统设置，快捷键
-    hotkey = setting().STT('hotkey')
+    hotkey = setting().get('hotkey')
 
     # 录音输入
     def hotkey_to_record():
