@@ -106,9 +106,9 @@ def main():
                                     wave_file.writeframes(b''.join(frames))
                                     wave_file.close()
                                 # 语音转文字
-                                    text = core.transcribe_audio(tmpfile.name)
+                                    user_messsage = core.transcribe_audio(tmpfile.name)
                                 # text = core.transcribe_audio(frames)
-                                print('get:', text)
+                                print('get:', user_messsage)
                                 # 解除进程锁，标记录音完成
                                 recording_complete.set()
                             # || 这个break不知道干啥用的，先标记一下
