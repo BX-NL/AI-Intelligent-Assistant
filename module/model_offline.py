@@ -1,7 +1,16 @@
 from transformers import AutoTokenizer, AutoModel
 from cpm_kernels.kernels.base import round_up
 import time
-# import config
+import os
+import sys
+
+# 获取当前文件的绝对路径
+current_dir = os.path.dirname(os.path.abspath(__file__))
+# 获取项目根目录
+work_dir = os.path.dirname(current_dir)
+# 将项目根目录添加到sys.path
+sys.path.append(work_dir)
+# 导入模块
 from module.config import setting
 
 class Model():

@@ -1,7 +1,12 @@
-# from stt import STT
-# from tts import TTS
-# import config
-# from control import Control
+import os
+import sys
+# 获取当前文件的绝对路径
+current_dir = os.path.dirname(os.path.abspath(__file__))
+# 获取项目根目录
+work_dir = os.path.dirname(current_dir)
+# 将项目根目录添加到sys.path
+sys.path.append(work_dir)
+# 导入模块
 from module.stt import STT
 from module.tts import TTS
 from module.config import setting
@@ -25,11 +30,6 @@ class Core:
         self.tts = TTS()
         self.control = Control()
         pass
-
-    # backup
-    # def transcribe_audio(self, frames):
-    #     text = self.stt.save_and_transcribe(frames)
-    #     return text
 
     def transcribe_audio(self, audio_path):
         text = self.stt.save_and_transcribe(audio_path)

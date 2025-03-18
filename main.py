@@ -8,9 +8,6 @@ import wave
 # import uvicorn
 from fastapi import FastAPI
 from funasr import AutoModel
-# import config
-# from core import Core
-# from stt import STT
 from module.core import Core
 from module.stt import STT
 from module.tts import TTS
@@ -105,14 +102,11 @@ def main():
                                     wave_file.setframerate(RATE)
                                     wave_file.writeframes(b''.join(frames))
                                     wave_file.close()
-                                # 语音转文字
+                                    # 语音转文字
                                     user_messsage = core.transcribe_audio(tmpfile.name)
-                                # text = core.transcribe_audio(frames)
                                 print('get:', user_messsage)
                                 # 解除进程锁，标记录音完成
                                 recording_complete.set()
-                            # || 这个break不知道干啥用的，先标记一下
-                            # break
 
                 # 判断是否录音成功
                 if is_recording and stream is not None:
@@ -127,7 +121,6 @@ def main():
                 stream.close()
             # 终止录音，关闭麦克风
             audio.terminate()
-
         
         
 

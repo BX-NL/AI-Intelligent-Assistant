@@ -3,10 +3,9 @@ import wave
 import keyboard
 from funasr import AutoModel
 from funasr.utils.postprocess_utils import rich_transcription_postprocess
-
 import os
 import sys
-# demo 模块单独运行时找不到module就用这几行
+
 # 获取当前文件的绝对路径
 current_dir = os.path.dirname(os.path.abspath(__file__))
 # 获取项目根目录
@@ -120,13 +119,9 @@ def debug():
                             wave_file.setframerate(RATE)
                             wave_file.writeframes(b''.join(frames))
                             wave_file.close()
-                        # 语音转文字
-                            # user_messsage = core.transcribe_audio(tmpfile.name)
+                            # 语音转文字
                             user_messsage = stt.save_and_transcribe(tmpfile.name)
-                        # text = core.transcribe_audio(frames)
                         print('get:', user_messsage)
-                        # || 这个break不知道干啥用的，先标记一下
-                        # break
 
             # 判断是否录音成功
             if is_recording and stream is not None:

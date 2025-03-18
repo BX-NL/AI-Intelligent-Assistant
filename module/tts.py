@@ -4,13 +4,23 @@ import io
 import time
 from playsound import playsound
 import tempfile
+import os
+import sys
+
+# 获取当前文件的绝对路径
+current_dir = os.path.dirname(os.path.abspath(__file__))
+# 获取项目根目录
+work_dir = os.path.dirname(current_dir)
+# 将项目根目录添加到sys.path
+sys.path.append(work_dir)
+# 导入模块
+from module.config import setting
 
 class TTS:
     def __init__(self):
         # 默认音色
-        self.voice = 'zh-CN-XiaoxiaoNeural'
-        # 默认语速
-        self.rate = '+0%'
+        self.voice = setting.get('voice')
+        self.proxy = setting.get('proxy')
 
     # 文本转语音，异步
     async def synthesize(self, text):
@@ -18,8 +28,7 @@ class TTS:
         communicate = edge_tts.Communicate(
             text=text,
             voice=self.voice,
-            rate=self.rate,
-            proxy='http://127.0.0.1:7890'
+            proxy=self.proxy
         )
 
         # 将音频数据保存到内存中

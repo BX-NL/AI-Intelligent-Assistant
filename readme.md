@@ -110,6 +110,8 @@
 
 2025-03-17 修复一个因重构导致的bug，为语音转文本增加接口
 
+2025-03-18 格式化部分代码
+
 ### templates
 
 [ChatGLM3](https://github.com/THUDM/ChatGLM3)
