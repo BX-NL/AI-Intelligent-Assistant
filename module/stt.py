@@ -164,7 +164,7 @@ def api():
             raise HTTPException(status_code=500, detail=str(e))
 
     import uvicorn
-    uvicorn.run(app, host="127.0.0.1", port=8503)
+    uvicorn.run(app, host="127.0.0.1", port=8500)
 
 
 if __name__ == '__main__':

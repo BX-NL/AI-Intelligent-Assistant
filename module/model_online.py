@@ -1,5 +1,3 @@
-import requests
-# import config
 import time
 from zhipuai import ZhipuAI
 import os
@@ -38,9 +36,6 @@ class Model:
         # 输入的格式 # todo 可以考虑做长期记忆
         self.messages = [
             {'role': 'system', 'content': prompt},
-            # {'role': 'user', 'content': '从现在开始，我的名字是Ninglog，你将作为我的个人语音助理，如果你明白以上规则，请回复:我明白了。'},
-            # {'role': 'assistant', 'content': '我明白了。'},
-            # {'role': 'user', 'content': '请介绍一下你自己。'},
         ]
 
     # 注入提示词 # todo 增加问候语，这print太假了
@@ -108,26 +103,10 @@ def api():
             raise HTTPException(status_code=500, detail=str(e))
 
     import uvicorn
-    uvicorn.run(app, host="127.0.0.1", port=8502)
+    uvicorn.run(app, host="127.0.0.1", port=8500)
 
 if __name__ == '__main__':
     if True:
         api()
     else:
         debug()
-
-
-# demo 本地部署API用法，可用于分布式，有空再研究
-class Model_ChatGLM_Offline_API:
-    def __init__(self):
-        self.api_url = 'http://localhost:8000'
-
-    async def initialize(self):
-        pass  # 这里可以实现一些初始化操作
-
-    async def generate_response(self, text):
-        response = requests.post(self.api_url, json={'text': text})
-        if response.status_code == 200:
-            return response.json()['response']
-        else:
-            raise Exception('API连接失败')

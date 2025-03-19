@@ -54,3 +54,21 @@ class Model():
     
 if __name__ == '__mian__':
     pass
+
+
+
+# demo 本地部署API用法，可用于分布式，有空再研究
+import requests
+class Model_ChatGLM_Offline_API:
+    def __init__(self):
+        self.api_url = 'http://localhost:8000'
+
+    async def initialize(self):
+        pass  # 这里可以实现一些初始化操作
+
+    async def generate_response(self, text):
+        response = requests.post(self.api_url, json={'text': text})
+        if response.status_code == 200:
+            return response.json()['response']
+        else:
+            raise Exception('API连接失败')
