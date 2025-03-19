@@ -51,10 +51,52 @@ class Model():
         new_message = response
         print('用时', time.time()-start_time, '秒')
         return new_message, history
-    
-if __name__ == '__mian__':
-    pass
 
+def debug():
+    model = Model()
+    history = model.in_prompt()
+    while True:
+        user_message = str(input('输入文本：'))
+        new_message, history = model.generate(history, user_message)
+        print(new_message)
+
+def api():
+    from fastapi import FastAPI, HTTPException
+    from pydantic import BaseModel
+
+    # 定义请求体模型
+    class ModelRequest(BaseModel):
+        history: list
+        user_message: str
+
+    app = FastAPI()
+    # 创建 Model 实例
+    model = Model()
+
+    @app.get('/model')
+    def in_prompt_api():
+        history = model.in_prompt()
+        return {'history': history}
+
+    @app.post('/model')
+    async def generate_api(request: ModelRequest):
+        history = request.history
+        user_message = request.user_message
+        try:
+            new_message, history = model.generate(history, user_message)
+            return {'new_message': new_message, 'history': history}
+
+        except Exception as e:
+            raise HTTPException(status_code=500, detail=str(e))
+
+    import uvicorn
+    uvicorn.run(app, host="127.0.0.1", port=8500)
+
+if __name__ == '__mian__':
+    if True:
+        api()
+    else:
+        debug()
 
 
 # demo 本地部署API用法，可用于分布式，有空再研究
