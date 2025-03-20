@@ -70,7 +70,7 @@ def api():
         user_message: str
 
     app = FastAPI()
-    # 创建 Model 实例
+    # 创建Model实例
     model = Model()
 
     @app.get('/model')
