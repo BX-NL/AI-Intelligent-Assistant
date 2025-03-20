@@ -74,11 +74,42 @@ class Control:
         else:
             print('文本错误')
 
-
-if __name__ == '__main__':
+def debug():
     control = Control()
     response_text = '[文本]This is an test message!'
     response_text = '[指令]启动浏览器'
     type, message = control.extract_message(response_text)
     print(type, message)
     control.device_control(type, message)
+
+def api():
+    from fastapi import FastAPI, HTTPException
+    from pydantic import BaseModel
+
+    # 定义请求体模型
+    class ModelRequest(BaseModel):
+        text: str
+
+    app = FastAPI()
+    # 创建Control实例
+    control = Control()
+
+    @app.post('/control')
+    async def device_control_api(request: ModelRequest):
+        text = request.text
+        try:
+            type, message = control.extract_message(text)
+            control.device_control(type, message)
+            return {'type': type, 'message': message}
+
+        except Exception as e:
+            raise HTTPException(status_code=500, detail=str(e))
+
+    import uvicorn
+    uvicorn.run(app, host="127.0.0.1", port=8500)
+
+if __name__ == '__main__':
+    if True:
+        api()
+    else:
+        debug()
