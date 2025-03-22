@@ -13,10 +13,8 @@ from module.config import setting
 from module.control import Control
 
 if setting().get('LLM') == 'offline':
-    # from model_offline import Model
     from module.model_offline import Model
 elif setting().get('LLM') == 'online':
-    # from model_online import Model
     from module.model_online import Model
 else:
     print('大模型加载失败')

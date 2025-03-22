@@ -14,9 +14,6 @@ from module.tts import TTS
 from module.config import setting
 from module.control import Control
 
-def print_welcome():
-    pass
-
 
 def main():
     # 初始化各模块
@@ -49,9 +46,6 @@ def main():
     RATE = 16000
     CHUNK = 1024
 
-    # 读取系统设置
-    # setting = config.setting()
-    # setting = setting()
     # 读取系统设置，快捷键
     hotkey = setting().get('hotkey')
 
