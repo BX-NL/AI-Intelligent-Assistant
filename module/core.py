@@ -1,5 +1,6 @@
 import os
 import sys
+import requests
 # 获取当前文件的绝对路径
 current_dir = os.path.dirname(os.path.abspath(__file__))
 # 获取项目根目录
@@ -50,6 +51,49 @@ class Core:
         type, message = self.control.extract_message(text)
         self.control.device_control(type, message)
 
+class Core_api:
+
+    def tts():
+        url = 'http://127.0.0.1:8500/tts'
+        data = {'text': '你好，我是爱丽丝'}
+        response = requests.post(url, json=data)
+        print(response.text)
+
+
+    def model():
+        url = 'http://127.0.0.1:8500/model'
+        response = requests.get(url)
+        history = response.json()['history']
+        print(history)
+        while True:
+            user_message = input('input:')
+            data = {'history': history,
+                    'user_message': user_message}
+            response = requests.post(url, json=data)
+            new_message = response.json()['new_message']
+            history = response.json()['history']
+            print(new_message)
+            print(history)
+
+    def stt():
+        url = 'http://127.0.0.1:8500/stt'
+        tmpfile_path = 'C:/Users/BX_NL/AppData/Local/Temp/tmprja0kj1c.wav'
+
+        # 以二进制模式打开文件
+        with open(tmpfile_path, 'rb') as tmpfile:
+            # 使用 multipart/form-data 格式上传文件
+            file = {'tmpfile': tmpfile}
+            response = requests.post(url, files=file)
+            tmpfile.close()
+
+        user_message = response.json()['user_message']
+        print(user_message)
+
+    def control():
+        url = 'http://127.0.0.1:8500/control'
+        data = {'text': '[文本]This is an test message!'}
+        response = requests.post(url, json=data)
+        print(response.text)
 
 if __name__ == '__main__':
     print('core')
