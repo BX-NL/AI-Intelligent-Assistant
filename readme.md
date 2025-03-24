@@ -127,6 +127,7 @@ Python >= 3.9
     2025-03-21 新增requirements.txt，完善readme.md
     2025-03-22 调整部分代码，重置了部分过往的Commits
     2025-03-23 开始构建core的分布式功能
+    2025-03-24 完善setting适配分布式功能
 
 ---
 

@@ -1,10 +1,28 @@
 # [system]
 # 用于debug
 debug : True
+# 本地化选项
+localization : zh_cn
 # 分布式开关
 distributed : True
-# 本地化开关
-localization : False
+
+# 分布式选项
+model_distributed :
+  static : False
+  IP : 127.0.0.1'
+  port : '8500'
+stt_distributed :
+  static : False
+  IP : '127.0.0.1'
+  port : '8500'
+tts_distributed :
+  static : False
+  IP : '127.0.0.1'
+  port : '8500'
+control_distributed :
+  static : False
+  IP : '127.0.0.1'
+  port : '8500'
 
 # [Model]
 # 大模型的接入方式，[online|offline]，在线模型或本地部署
