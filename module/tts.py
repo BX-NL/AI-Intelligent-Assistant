@@ -94,7 +94,7 @@ def api():
 
             # 使用 playsound 播放音频
             playsound(tmpfile_path)
-            return {"message": "语音播放成功"}
+            return {'message': '语音播放成功'}
         except Exception as e:
             raise HTTPException(status_code=500, detail=str(e))
 
