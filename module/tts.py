@@ -19,8 +19,9 @@ from module.config import setting
 class TTS:
     def __init__(self):
         # 默认音色
-        self.voice = setting.get('voice')
-        self.proxy = setting.get('proxy')
+        self.setting = setting()
+        self.voice = self.setting.get('voice')
+        self.proxy = self.setting.get('proxy')
 
     # 文本转语音，异步
     async def synthesize(self, text):
