@@ -19,9 +19,9 @@ from module.config import setting
 class TTS:
     def __init__(self):
         # 默认音色
-        self.setting = setting()
-        self.voice = self.setting.get('voice')
-        self.proxy = self.setting.get('proxy')
+        self.settings = setting().get('TTS')
+        self.voice = self.settings['voice']
+        self.proxy = self.settings['proxy']
 
     # 文本转语音，异步
     async def synthesize(self, text):
@@ -63,9 +63,9 @@ class TTS:
 
 def debug():
     tts = TTS()
-    text = input('input')
+    text = input('input:')
     tts.synthesize_and_play(text)
-    print('output')
+    print('output sucess')
 
 def api():
     from fastapi import FastAPI, HTTPException

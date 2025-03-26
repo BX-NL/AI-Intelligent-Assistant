@@ -16,12 +16,11 @@ from module.config import setting
 class Model():
     def __init__(self):
         # 系统设置
-        # self.setting = config.setting()
-        self.setting = setting()
+        self.settings = setting('model')
         # 本地模型路径
-        model_path = self.setting.get('model_path')
+        model_path = self.settings['model_path']
         # 预设的提示词
-        self.prompt = self.setting.get('prompt')
+        self.prompt = self.settings['prompt']
         # tokenizer.py，原理暂不明确
         self.tokenizer = AutoTokenizer.from_pretrained(model_path, trust_remote_code=True)
         # int4量化测试可用

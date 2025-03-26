@@ -1,26 +1,24 @@
 import os
 import sys
 import requests
-# 获取当前文件的绝对路径
-current_dir = os.path.dirname(os.path.abspath(__file__))
-# 获取项目根目录
-work_dir = os.path.dirname(current_dir)
-# 将项目根目录添加到sys.path
-sys.path.append(work_dir)
-from module.config import setting
-distributed = setting().get('distributed')
-if not distributed:
-    # 导入模块
-    from module.stt import STT
-    from module.tts import TTS
-    from module.control import Control
-
-    if setting().get('LLM') == 'offline':
-        from module.model_offline import Model
-    elif setting().get('LLM') == 'online':
-        from module.model_online import Model
-    else:
-        print('大模型加载失败')
+# # 获取当前文件的绝对路径
+# current_dir = os.path.dirname(os.path.abspath(__file__))
+# # 获取项目根目录
+# work_dir = os.path.dirname(current_dir)
+# # 将项目根目录添加到sys.path
+# sys.path.append(work_dir)
+from .config import setting
+# 导入模块
+from .stt import STT
+from .tts import TTS
+from .control import Control
+settings = setting().get('model')
+if settings['LLM'] == 'offline':
+    from .model_offline import Model
+elif settings['LLM'] == 'online':
+    from .model_online import Model
+else:
+    print('大模型加载失败')
 
 
 class Core:

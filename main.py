@@ -47,7 +47,8 @@ def main():
     CHUNK = 1024
 
     # 读取系统设置，快捷键
-    hotkey = setting().get('hotkey')
+    settings = setting().get('STT')
+    hotkey = settings['hotkey']
 
     # 录音输入
     def hotkey_to_record():
