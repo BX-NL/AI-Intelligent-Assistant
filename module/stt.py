@@ -165,7 +165,8 @@ def api():
             raise HTTPException(status_code=500, detail=str(e))
 
     import uvicorn
-    uvicorn.run(app, host="127.0.0.1", port=8500)
+    # todo 从setting里拿端口
+    uvicorn.run(app, host="127.0.0.1", port=8502)
 
 
 if __name__ == '__main__':
