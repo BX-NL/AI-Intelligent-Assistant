@@ -1,5 +1,5 @@
-import os
-import sys
+# import os
+# import sys
 import requests
 # # 获取当前文件的绝对路径
 # current_dir = os.path.dirname(os.path.abspath(__file__))
@@ -23,6 +23,17 @@ else:
 
 class Core:
     def __init__(self):
+        # 读取系统设置
+        settings = setting()
+        self.settings_model = settings.get('model')
+        self.settings_stt = settings.get('STT')
+        self.settings_tts = settings.get('TTS')
+        self.settings_control = settings.get('control')
+        # 读取分布式设置
+        self.distribute_model = self.settings_model['mode']
+        self.distribute_stt = self.settings_stt['mode']
+        self.distribute_tts = self.settings_tts['mode']
+        self.distribute_control = self.settings_control['mode']
         # 初始化各模块
         self.model = Model()
         self.stt = STT()
@@ -31,73 +42,86 @@ class Core:
         pass
 
     def transcribe_audio(self, audio_path):
-        text = self.stt.save_and_transcribe(audio_path)
+        if self.distribute_stt == 'online':
+            text = self.stt.save_and_transcribe(audio_path)
+
+        elif self.distribute_stt == 'offline':
+            IP = self.settings_stt['IP']
+            port = self.settings_stt['port']
+            url = 'http://' + IP + ':' + port + '/stt'
+
+            # 以二进制模式打开文件
+            with open(audio_path, 'rb') as tmpfile:
+                # 使用 multipart/form-data 格式上传文件
+                file = {'tmpfile': tmpfile}
+                response = requests.post(url, files=file)
+                tmpfile.close()
+
+            text = response.json()['user_message']
+        else:
+            print('mode error')
+
         return text
 
     def get_in_prompt(self):
-        history = self.model.in_prompt()
+        if self.distribute_model == 'online':
+            history = self.model.in_prompt()
+
+        elif self.distribute_model == 'offline':
+            IP = self.settings_stt['IP']
+            port = self.settings_stt['port']
+            url = 'http://' + IP + ':' + port + '/model'
+
+            response = requests.get(url)
+            history = response.json()['history']
+
         return history
 
     def generate_response(self, history, text):
         if not text:
             text = '继续'
-        response, self.history = self.model.generate(history, text)
-        return response, self.history
 
-    def synthesize_and_play(self, text):
-        self.tts.synthesize_and_play(text)
+        # 忘了当初为什么用的self.history，能跑就先别动，有空再改
+        if self.distribute_model == 'online':
+            new_message, self.history = self.model.generate(history, text)
 
-    def system_control(self, text):
-        type, message = self.control.extract_message(text)
-        self.control.device_control(type, message)
+        elif self.distribute_model == 'offline':
+            IP = self.settings_stt['IP']
+            port = self.settings_stt['port']
+            url = 'http://' + IP + ':' + port + '/model'
 
-class Core_api:
-    def __init__(self):
-        pass
-
-    def transcribe_audio(self, audio_path):
-        url = 'http://127.0.0.1:8500/stt'
-
-        # 以二进制模式打开文件
-        with open(audio_path, 'rb') as tmpfile:
-            # 使用 multipart/form-data 格式上传文件
-            file = {'tmpfile': tmpfile}
-            response = requests.post(url, files=file)
-            tmpfile.close()
-
-        user_message = response.json()['user_message']
-        return user_message
-
-    def get_in_prompt():
-        url = 'http://127.0.0.1:8500/model'
-        response = requests.get(url)
-        history = response.json()['history']
-        return history
-
-    def generate_response(self, history, text):
-        url = 'http://127.0.0.1:8500/model'
-        while True:
-            data = {'history': history,
-                    'user_message': text}
+            data = {'history': history, 'user_message': text}
             response = requests.post(url, json=data)
             new_message = response.json()['new_message']
-            history = response.json()['history']
-            return new_message, history
+            self.history = response.json()['history']
 
+        return new_message, self.history
 
     def synthesize_and_play(self, text):
-        url = 'http://127.0.0.1:8500/tts'
-        data = {'text': text}
-        response = requests.post(url, json=data)
-        # {'message': '语音播放成功'}
-        print(response.text)
+        if self.distribute_tts == 'online':
+            self.tts.synthesize_and_play(text)
+
+        elif self.distribute_tts == 'offline':
+            IP = self.settings_stt['IP']
+            port = self.settings_stt['port']
+            url = 'http://' + IP + ':' + port + '/tts'
+
+            data = {'text': text}
+            requests.post(url, json=data)
 
     def system_control(self, text):
-        url = 'http://127.0.0.1:8500/control'
-        data = {'text': text}
-        response = requests.post(url, json=data)
-        # {'type': type, 'message': message}
-        print(response.text)
+        if self.distribute_control == 'online':
+            type, message = self.control.extract_message(text)
+            self.control.device_control(type, message)
+
+        elif self.distribute_control == 'offline':
+            IP = self.settings_stt['IP']
+            port = self.settings_stt['port']
+            url = 'http://' + IP + ':' + port + '/control'
+
+            data = {'text': text}
+            requests.post(url, json=data)
+        
 
 if __name__ == '__main__':
     print('core')
