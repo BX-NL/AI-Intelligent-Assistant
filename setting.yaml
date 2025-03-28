@@ -32,7 +32,7 @@ model :
 
   mode : online
   IP : 127.0.0.1'
-  port : '8501'
+  port : 8501
 
 # [STT]
 STT :
@@ -41,7 +41,7 @@ STT :
 
   mode : online
   IP : '127.0.0.1'
-  port : '8502'
+  port : 8502
 
 # [TTS]
 TTS :
@@ -52,10 +52,10 @@ TTS :
 
   mode : online
   IP : '127.0.0.1'
-  port : '8503'
+  port : 8503
 
 # [control]
 control :
   mode : online
   IP : '127.0.0.1'
-  port : '8504'
+  port : 8504

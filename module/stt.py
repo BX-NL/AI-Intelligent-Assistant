@@ -142,6 +142,10 @@ def api():
     from fastapi import FastAPI, File, UploadFile, HTTPException
     from pydantic import BaseModel
 
+    # 读取系统设置
+    settings = setting().get('STT')
+    port = settings['port']
+
     app = FastAPI()
     # 创建 Model 实例
     stt = STT()
@@ -165,8 +169,7 @@ def api():
             raise HTTPException(status_code=500, detail=str(e))
 
     import uvicorn
-    # todo 从setting里拿端口
-    uvicorn.run(app, host="127.0.0.1", port=8502)
+    uvicorn.run(app, host="127.0.0.1", port=port)
 
 
 if __name__ == '__main__':

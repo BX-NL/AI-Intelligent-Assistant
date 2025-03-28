@@ -18,7 +18,7 @@ from module.config import setting
 
 class TTS:
     def __init__(self):
-        # 默认音色
+        # 读取系统设置
         self.settings = setting().get('TTS')
         self.voice = self.settings['voice']
         self.proxy = self.settings['proxy']
@@ -71,6 +71,10 @@ def api():
     from fastapi import FastAPI, HTTPException
     from pydantic import BaseModel
 
+    # 读取系统设置
+    settings = setting().get('TTS')
+    port = settings['port']
+
     # 定义请求体模型
     class TTSRequest(BaseModel):
         text: str
@@ -100,8 +104,7 @@ def api():
             raise HTTPException(status_code=500, detail=str(e))
 
     import uvicorn
-    # todo 从setting里拿端口
-    uvicorn.run(app, host="127.0.0.1", port=8503)
+    uvicorn.run(app, host="127.0.0.1", port=port)
 
 if __name__ == '__main__':
     if True:

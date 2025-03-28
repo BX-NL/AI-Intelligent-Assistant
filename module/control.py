@@ -1,7 +1,16 @@
 import re
 import os
+import sys
 import pyautogui
 
+# 获取当前文件的绝对路径
+current_dir = os.path.dirname(os.path.abspath(__file__))
+# 获取项目根目录
+work_dir = os.path.dirname(current_dir)
+# 将项目根目录添加到sys.path
+sys.path.append(work_dir)
+# 导入模块
+from module.config import setting
 
 class Control:
     def __init__(self):
@@ -85,6 +94,9 @@ def api():
     from fastapi import FastAPI, HTTPException
     from pydantic import BaseModel
 
+    settings = setting().get('control')
+    port = settings['port']
+
     # 定义请求体模型
     class ModelRequest(BaseModel):
         text: str
@@ -105,8 +117,7 @@ def api():
             raise HTTPException(status_code=500, detail=str(e))
 
     import uvicorn
-    # todo 从setting里拿端口
-    uvicorn.run(app, host="127.0.0.1", port=8504)
+    uvicorn.run(app, host="127.0.0.1", port=port)
 
 if __name__ == '__main__':
     if True:

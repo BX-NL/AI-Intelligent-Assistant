@@ -16,7 +16,7 @@ from module.config import setting
 class Model():
     def __init__(self):
         # 系统设置
-        self.settings = setting('model')
+        self.settings = setting().get('model')
         # 本地模型路径
         model_path = self.settings['model_path']
         # 预设的提示词
@@ -63,6 +63,10 @@ def api():
     from fastapi import FastAPI, HTTPException
     from pydantic import BaseModel
 
+    # 读取系统设置
+    settings = setting().get('model')
+    port = settings['port']
+
     # 定义请求体模型
     class ModelRequest(BaseModel):
         history: list
@@ -89,8 +93,7 @@ def api():
             raise HTTPException(status_code=500, detail=str(e))
 
     import uvicorn
-    # todo 从setting里拿端口
-    uvicorn.run(app, host="127.0.0.1", port=8501)
+    uvicorn.run(app, host="127.0.0.1", port=port)
 
 if __name__ == '__mian__':
     if True:
