@@ -71,6 +71,7 @@ Python >= 3.9
 
 ### 文件树 Tree
     module/
+        __init__.py
         config.py
         control.py
         core.py
@@ -132,7 +133,7 @@ Python >= 3.9
     2025-03-26 修复bug，调整setting结构
     2025-03-27 修复分布式端口的bug，完成分布式功能
     2025-03-28 整合部分设置
-    2025-03-29 修复重复实例化的bug
+    2025-03-29 修复重复实例化的bug，修复若干bug
 
 ---
 

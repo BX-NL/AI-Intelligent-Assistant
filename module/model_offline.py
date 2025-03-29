@@ -95,7 +95,7 @@ def api():
     import uvicorn
     uvicorn.run(app, host="127.0.0.1", port=port)
 
-if __name__ == '__mian__':
+if __name__ == '__main__':
     if True:
         api()
     else:
