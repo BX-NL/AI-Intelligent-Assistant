@@ -43,6 +43,10 @@ class TTS:
         return stream
 
     def synthesize_and_play(self, text):
+        # 合成语音时去除回复类型
+        if '[' in text or ']' in text:
+            text = text[4:]
+
         # 异步合成语音
         # loop = asyncio.new_event_loop()
         # asyncio.set_event_loop(loop)
