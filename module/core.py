@@ -25,15 +25,24 @@ class Core:
     def __init__(self):
         # 读取系统设置
         settings = setting()
+        settings_distribute = settings.get('distribute')
+        # 读取各模块设置
         self.settings_model = settings.get('model')
         self.settings_stt = settings.get('STT')
         self.settings_tts = settings.get('TTS')
         self.settings_control = settings.get('control')
-        # 读取分布式设置
-        self.distribute_model = self.settings_model['mode']
-        self.distribute_stt = self.settings_stt['mode']
-        self.distribute_tts = self.settings_tts['mode']
-        self.distribute_control = self.settings_control['mode']
+        if settings_distribute == 'True':
+            # 读取分布式设置
+            self.distribute_model = self.settings_model['mode']
+            self.distribute_stt = self.settings_stt['mode']
+            self.distribute_tts = self.settings_tts['mode']
+            self.distribute_control = self.settings_control['mode']
+        else:
+            # 覆盖分布式设置
+            self.distribute_model = 'offline'
+            self.distribute_stt = 'offline'
+            self.distribute_tts = 'offline'
+            self.distribute_control = 'offline'
         # 初始化各模块
         self.model = Model()
         self.stt = STT()
@@ -42,12 +51,12 @@ class Core:
         pass
 
     def transcribe_audio(self, audio_path):
-        if self.distribute_stt == 'online':
+        if self.distribute_stt == 'offline':
             text = self.stt.save_and_transcribe(audio_path)
 
-        elif self.distribute_stt == 'offline':
+        elif self.distribute_stt == 'online':
             IP = self.settings_stt['IP']
-            port = self.settings_stt['port']
+            port = str(self.settings_stt['port'])
             url = 'http://' + IP + ':' + port + '/stt'
 
             # 以二进制模式打开文件
@@ -64,12 +73,12 @@ class Core:
         return text
 
     def get_in_prompt(self):
-        if self.distribute_model == 'online':
+        if self.distribute_model == 'offline':
             history = self.model.in_prompt()
 
-        elif self.distribute_model == 'offline':
+        elif self.distribute_model == 'online':
             IP = self.settings_stt['IP']
-            port = self.settings_stt['port']
+            port = str(self.settings_stt['port'])
             url = 'http://' + IP + ':' + port + '/model'
 
             response = requests.get(url)
@@ -82,12 +91,12 @@ class Core:
             text = '继续'
 
         # 忘了当初为什么用的self.history，能跑就先别动，有空再改
-        if self.distribute_model == 'online':
+        if self.distribute_model == 'offline':
             new_message, self.history = self.model.generate(history, text)
 
-        elif self.distribute_model == 'offline':
+        elif self.distribute_model == 'online':
             IP = self.settings_stt['IP']
-            port = self.settings_stt['port']
+            port = str(self.settings_stt['port'])
             url = 'http://' + IP + ':' + port + '/model'
 
             data = {'history': history, 'user_message': text}
@@ -98,25 +107,25 @@ class Core:
         return new_message, self.history
 
     def synthesize_and_play(self, text):
-        if self.distribute_tts == 'online':
+        if self.distribute_tts == 'offline':
             self.tts.synthesize_and_play(text)
 
-        elif self.distribute_tts == 'offline':
+        elif self.distribute_tts == 'online':
             IP = self.settings_stt['IP']
-            port = self.settings_stt['port']
+            port = str(self.settings_stt['port'])
             url = 'http://' + IP + ':' + port + '/tts'
 
             data = {'text': text}
             requests.post(url, json=data)
 
     def system_control(self, text):
-        if self.distribute_control == 'online':
+        if self.distribute_control == 'offline':
             type, message = self.control.extract_message(text)
             self.control.device_control(type, message)
 
-        elif self.distribute_control == 'offline':
+        elif self.distribute_control == 'online':
             IP = self.settings_stt['IP']
-            port = self.settings_stt['port']
+            port = str(self.settings_stt['port'])
             url = 'http://' + IP + ':' + port + '/control'
 
             data = {'text': text}
