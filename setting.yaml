@@ -31,7 +31,7 @@ model :
   zhipuAI_model : 'glm-4-flash'
 
   mode : online
-  IP : 127.0.0.1'
+  IP : '127.0.0.1'
   port : 8501
 
 # [STT]
