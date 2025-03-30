@@ -47,6 +47,7 @@ class Model():
         start_time = time.time()
         # 传入用户输入的文本并获取回复
         response, history = self.model.chat(self.tokenizer, user_message, history=history)
+        # todo 移除语气或另外存放
         new_message = response
         print('用时', time.time()-start_time, '秒')
         return new_message, history

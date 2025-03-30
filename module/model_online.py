@@ -54,6 +54,7 @@ class Model:
         history.append({'role': 'user', 'content': user_message})
         # 传入用户输入的文本并获取回复
         response = self.client.chat.completions.create(model=self.model, messages=history, stream=True)
+        # todo 移除语气或另外存放
         # 流式输出 # todo 先占个坑位，万一用得上
         for chunk in response:
             text = chunk.choices[0].delta.content
