@@ -31,7 +31,7 @@ class Core:
         self.settings_stt = settings.get('STT')
         self.settings_tts = settings.get('TTS')
         self.settings_control = settings.get('control')
-        if settings_distribute == 'True':
+        if settings_distribute == True:
             # 读取分布式设置
             self.distribute_model = self.settings_model['mode']
             self.distribute_stt = self.settings_stt['mode']
@@ -77,8 +77,8 @@ class Core:
             history = self.model.in_prompt()
 
         elif self.distribute_model == 'online':
-            IP = self.settings_stt['IP']
-            port = str(self.settings_stt['port'])
+            IP = self.settings_model['IP']
+            port = str(self.settings_model['port'])
             url = 'http://' + IP + ':' + port + '/model'
 
             response = requests.get(url)
@@ -95,8 +95,8 @@ class Core:
             new_message, self.history = self.model.generate(history, text)
 
         elif self.distribute_model == 'online':
-            IP = self.settings_stt['IP']
-            port = str(self.settings_stt['port'])
+            IP = self.settings_model['IP']
+            port = str(self.settings_model['port'])
             url = 'http://' + IP + ':' + port + '/model'
 
             data = {'history': history, 'user_message': text}
@@ -111,8 +111,8 @@ class Core:
             self.tts.synthesize_and_play(text)
 
         elif self.distribute_tts == 'online':
-            IP = self.settings_stt['IP']
-            port = str(self.settings_stt['port'])
+            IP = self.settings_tts['IP']
+            port = str(self.settings_tts['port'])
             url = 'http://' + IP + ':' + port + '/tts'
 
             data = {'text': text}
@@ -124,8 +124,8 @@ class Core:
             self.control.device_control(type, message)
 
         elif self.distribute_control == 'online':
-            IP = self.settings_stt['IP']
-            port = str(self.settings_stt['port'])
+            IP = self.settings_control['IP']
+            port = str(self.settings_control['port'])
             url = 'http://' + IP + ':' + port + '/control'
 
             data = {'text': text}

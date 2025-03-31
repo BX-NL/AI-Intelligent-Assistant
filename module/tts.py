@@ -90,8 +90,11 @@ def api():
     @app.post("/tts")
     async def synthesize_and_play_api(request: TTSRequest):
         try:
-            # 异步合成语音
             text = request.text
+            # 合成语音时去除回复类型
+            if '[' in text or ']' in text:
+                text = text[4:]
+            # 异步合成语音
             audio_data = await tts.synthesize(text)
             # todo 为了分布式进行的妥协，后续尝试不用playsound，异步套异步会报错
             # 将音频数据保存到临时文件
