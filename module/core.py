@@ -8,24 +8,26 @@ import requests
 # # 将项目根目录添加到sys.path
 # sys.path.append(work_dir)
 from .config import setting
-# 导入模块
-from .stt import STT
-from .tts import TTS
-from .control import Control
-settings = setting().get('model')
-if settings['LLM'] == 'offline':
-    from .model_offline import Model
-elif settings['LLM'] == 'online':
-    from .model_online import Model
-else:
-    print('大模型加载失败')
+# 读取系统设置
+settings = setting()
+settings_distribute = settings.get('distribute')
+if settings_distribute == False:
+    # 导入模块
+    from .stt import STT
+    from .tts import TTS
+    from .control import Control
+    settings_model = settings.get('model')
+    if settings_model['LLM'] == 'offline':
+        from .model_offline import Model
+    elif settings_model['LLM'] == 'online':
+        from .model_online import Model
+    else:
+        print('大模型加载失败')
 
 
 class Core:
     def __init__(self):
-        # 读取系统设置
-        settings = setting()
-        settings_distribute = settings.get('distribute')
+        
         # 读取各模块设置
         self.settings_model = settings.get('model')
         self.settings_stt = settings.get('STT')
@@ -38,17 +40,16 @@ class Core:
             self.distribute_tts = self.settings_tts['mode']
             self.distribute_control = self.settings_control['mode']
         else:
-            # 覆盖分布式设置
+            # 覆写分布式设置
             self.distribute_model = 'offline'
             self.distribute_stt = 'offline'
             self.distribute_tts = 'offline'
             self.distribute_control = 'offline'
-        # 初始化各模块
-        self.model = Model()
-        self.stt = STT()
-        self.tts = TTS()
-        self.control = Control()
-        pass
+            # 初始化各模块
+            self.model = Model()
+            self.stt = STT()
+            self.tts = TTS()
+            self.control = Control()
 
     def transcribe_audio(self, audio_path):
         if self.distribute_stt == 'offline':
