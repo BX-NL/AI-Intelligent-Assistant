@@ -29,7 +29,6 @@ Python >= 3.9
 >我还没测试过安装这块的内容，如果还是安装失败，可以创建一个issue
 
 >I had never test this part. If the installation still fails, you can create an issue
-
 ---
 
 ### 运行 Run
@@ -44,10 +43,27 @@ Python >= 3.9
 
 分布式部署模式 Distributed mode
 
-    # 单独运行各模块 Run each module separately
+>1.修改setting.yaml的distribute为True以启用分布式功能
+
+>1.Set 'distribute' as True to turn on distribute mode in setting.yaml
+
+>2.修改各个模块的mode选项
+
+>2.Switch mode of each module
+
+>3.单独运行你需要使用的分布式的模块
+
+>3.Run each module that you need to use
+
+>module: control、model_offline|model_online、stt、tts
+
     python [module].py
 
->[module]: core、control、model_offline|model_online、stt、tts
+>4.启动命令行模式或网页模式
+
+>4.Start CLI or Web-UI
+
+    python main.py|app.py
 
 >后面应该会考虑加个脚本用于处理
 
@@ -137,6 +153,7 @@ Python >= 3.9
     2025-03-30 调整文字转语音的范围，修复分布式的若干bug，调整core部分代码
     2025-03-31 修复分布式的bug，尝试重构core适应双模式
     2025-04-01 修复bug，完善代码和注释
+    2025-04-02 修改readme.md部分内容，人快炸了，歇两天
 
 ---
 
