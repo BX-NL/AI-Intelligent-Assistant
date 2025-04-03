@@ -97,14 +97,14 @@ def api():
 
     @app.post('/model')
     async def generate_api(request: ModelRequest):
-        history = request.history
-        user_message = request.user_message
         try:
+            history = request.history
+            user_message = request.user_message
             new_message, history = model.generate(history, user_message)
             return {'new_message': new_message, 'history': history}
 
-        except Exception as e:
-            raise HTTPException(status_code=500, detail=str(e))
+        except Exception:
+            raise HTTPException(status_code=500, detail=str(Exception))
 
     import uvicorn
     uvicorn.run(app, host="127.0.0.1", port=port)

@@ -165,8 +165,8 @@ def api():
             user_message = stt.save_and_transcribe(tmpfile_path)
             return {'user_message': user_message}
 
-        except Exception as e:
-            raise HTTPException(status_code=500, detail=str(e))
+        except Exception:
+            raise HTTPException(status_code=500, detail=str(Exception))
 
     import uvicorn
     uvicorn.run(app, host="127.0.0.1", port=port)

@@ -107,14 +107,14 @@ def api():
 
     @app.post('/control')
     async def device_control_api(request: ModelRequest):
-        text = request.text
         try:
+            text = request.text
             type, message = control.extract_message(text)
             control.device_control(type, message)
             return {'type': type, 'message': message}
 
-        except Exception as e:
-            raise HTTPException(status_code=500, detail=str(e))
+        except Exception:
+            raise HTTPException(status_code=500, detail=str(Exception))
 
     import uvicorn
     uvicorn.run(app, host="127.0.0.1", port=port)

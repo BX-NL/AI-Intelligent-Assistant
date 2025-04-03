@@ -107,8 +107,8 @@ def api():
             # 使用 playsound 播放音频
             playsound(tmpfile_path)
             return {'message': '语音播放成功'}
-        except Exception as e:
-            raise HTTPException(status_code=500, detail=str(e))
+        except Exception:
+            raise HTTPException(status_code=500, detail=str(Exception))
 
     import uvicorn
     uvicorn.run(app, host="127.0.0.1", port=port)
