@@ -167,6 +167,10 @@ def api():
 
         except Exception:
             raise HTTPException(status_code=500, detail=str(Exception))
+    
+    @app.get('/stt/status')
+    async def static():
+        return status.HTTP_200_OK
 
     import uvicorn
     uvicorn.run(app, host="127.0.0.1", port=port)

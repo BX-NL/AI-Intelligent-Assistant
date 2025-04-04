@@ -140,6 +140,9 @@ class Core:
             requests.post(url, json=data)
         else:
             print('setting error [control]')
+    
+    def get_module_status():
+        pass
         
 
 if __name__ == '__main__':
