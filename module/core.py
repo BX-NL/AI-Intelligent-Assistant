@@ -141,8 +141,13 @@ class Core:
         else:
             print('setting error [control]')
     
-    def get_module_status():
-        pass
+    def get_module_status(self):
+        # demo status api
+        status = []
+        IP = self.settings_control['IP']
+        port = str(self.settings_control['port'])
+        url = 'http://' + IP + ':' + port + '/control'
+        return status
         
 
 if __name__ == '__main__':
