@@ -91,7 +91,7 @@ def debug():
     control.device_control(type, message)
 
 def api():
-    from fastapi import FastAPI, HTTPException
+    from fastapi import FastAPI, HTTPException, status
     from pydantic import BaseModel
 
     settings = setting().get('control')
@@ -117,7 +117,7 @@ def api():
             raise HTTPException(status_code=500, detail=str(Exception))
     
     @app.get('/control/status')
-    async def static():
+    async def get_status():
         return status.HTTP_200_OK
 
     import uvicorn

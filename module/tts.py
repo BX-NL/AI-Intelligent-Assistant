@@ -72,7 +72,7 @@ def debug():
     print('output sucess')
 
 def api():
-    from fastapi import FastAPI, HTTPException
+    from fastapi import FastAPI, HTTPException, status
     from pydantic import BaseModel
 
     # 读取系统设置

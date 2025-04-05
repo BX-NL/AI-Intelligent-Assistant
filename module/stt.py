@@ -139,7 +139,7 @@ def debug():
         audio.terminate()
 
 def api():
-    from fastapi import FastAPI, File, UploadFile, HTTPException
+    from fastapi import FastAPI, File, UploadFile, HTTPException, status
     from pydantic import BaseModel
 
     # 读取系统设置
