@@ -14,9 +14,9 @@ if settings_distribute == False:
 
     # 读取大模型设置
     settings_model = settings.get('model')
-    if settings_model['model'] == 'offline':
+    if settings_model['LLM'] == 'offline':
         from .model_offline import Model
-    elif settings_model['model'] == 'online':
+    elif settings_model['LLM'] == 'online':
         from .model_online import Model
     else:
         print('大模型加载失败')
