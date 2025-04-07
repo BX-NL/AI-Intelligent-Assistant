@@ -19,7 +19,7 @@ if settings_distribute == False:
     elif settings_model['LLM'] == 'online':
         from .model_online import Model
     else:
-        print('大模型加载失败')
+        print('Error Import: model')
 
 
 class Core:
@@ -66,7 +66,7 @@ class Core:
             # 获取转换后的文字
             text = response.json()['user_message']
         else:
-            print('setting error [STT]')
+            print('Error Setting: [STT]')
 
         return text
 
@@ -83,7 +83,7 @@ class Core:
             response = requests.get(url)
             history = response.json()['history']
         else:
-            print('setting error [model]')
+            print('Error Setting: [model]')
 
         return history
 
@@ -106,7 +106,7 @@ class Core:
             new_message = response.json()['new_message']
             self.history = response.json()['history']
         else:
-            print('setting error [model]')
+            print('Error Setting: [model]')
 
         return new_message, self.history
 
@@ -123,7 +123,7 @@ class Core:
             data = {'text': text}
             requests.post(url, json=data)
         else:
-            print('setting error [TTS]')
+            print('Error Setting: [TTS]')
 
     def system_control(self, text):
         if self.distribute_control == 'offline':
@@ -139,16 +139,19 @@ class Core:
             data = {'text': text}
             requests.post(url, json=data)
         else:
-            print('setting error [control]')
+            print('Error Setting: [control]')
     
     def get_module_status(self):
         # demo status api
         status = []
         IP = self.settings_control['IP']
         port = str(self.settings_control['port'])
-        url = 'http://' + IP + ':' + port + '/control'
+        url = 'http://' + IP + ':' + port + '/control/status'
+        def get_status_stt():
+            status = requests.get(url)
+            return
         return status
         
 
 if __name__ == '__main__':
-    print('core')
+    print('Error Running: core')
