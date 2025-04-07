@@ -142,6 +142,7 @@ def main():
 
     # 开始
     while not exit_program:
+        user_messsage = ''
         print('输入文本或按下', hotkey, '开始语音输入')
         # 进程锁
         recording_complete.wait()
