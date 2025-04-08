@@ -142,14 +142,77 @@ class Core:
             print('Error Setting: [control]')
     
     def get_module_status(self):
-        # demo status api
+        # 脑子转不过来了，有空再弄，先这么跑着吧
         status = []
-        IP = self.settings_control['IP']
-        port = str(self.settings_control['port'])
-        url = 'http://' + IP + ':' + port + '/control/status'
-        def get_status_stt():
-            status = requests.get(url)
-            return
+
+        # model
+        if self.distribute_model == 'offline':
+            statu = 'Local'
+        elif self.distribute_model == 'online':
+            IP = self.settings_model['IP']
+            port = str(self.settings_model['port'])
+            url = 'http://' + IP + ':' + port + '/model/status'
+            try:
+                response = requests.get(url)
+                if response.status_code == 200:
+                    statu = 'Remote'
+            except:
+                statu = 'Error'
+        else:
+            print('Error Setting: [model]')
+        status.append(statu)
+
+        # STT
+        if self.distribute_stt == 'offline':
+            statu = 'Local'
+        elif self.distribute_stt == 'online':
+            IP = self.settings_stt['IP']
+            port = str(self.settings_stt['port'])
+            url = 'http://' + IP + ':' + port + '/stt/status'
+            try:
+                response = requests.get(url)
+                if response.status_code == 200:
+                    statu = 'Remote'
+            except:
+                statu = 'Error'
+        else:
+            print('Error Setting: [STT]')
+        status.append(statu)
+
+        # TTS
+        if self.distribute_tts == 'offline':
+            statu = 'Local'
+        elif self.distribute_tts == 'online':
+            IP = self.settings_tts['IP']
+            port = str(self.settings_tts['port'])
+            url = 'http://' + IP + ':' + port + '/tts/status'
+            try:
+                response = requests.get(url)
+                if response.status_code == 200:
+                    statu = 'Remote'
+            except:
+                statu = 'Error'
+        else:
+            print('Error Setting: [TTS]')
+        status.append(statu)
+
+        # control
+        if self.distribute_control == 'offline':
+            statu = 'Local'
+        elif self.distribute_control == 'online':
+            IP = self.settings_control['IP']
+            port = str(self.settings_control['port'])
+            url = 'http://' + IP + ':' + port + '/control/status'
+            try:
+                response = requests.get(url)
+                if response.status_code == 200:
+                    statu = 'Remote'
+            except:
+                statu = 'Error'
+        else:
+            print('Error Setting: [control]')
+        status.append(statu)
+
         return status
         
 
