@@ -165,14 +165,6 @@ def main():
         core.system_control(new_message)
         print('指令执行完毕')
 
-# todo 留个坑位做分布式和前端
-app = FastAPI()
-
-@app.get("/")
-async def mian():
-    main()
-    return {"message": "Hello, World!"}
-
 # 运行程序
 if __name__ == '__main__':
     main()

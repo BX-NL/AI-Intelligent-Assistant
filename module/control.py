@@ -26,7 +26,7 @@ class Control:
 
     def extract_message(self, response_text):
 
-        # 提取type
+        # 正则表达式提取type
         type_pattern = r'\[(.*?)\]'
         type_match = re.search(type_pattern, response_text)
         if type_match:
@@ -45,6 +45,7 @@ class Control:
         return type, message
 
     def device_control(self, type, message):
+        # 分类文本类型
         if type == '对话':
             pass
 
@@ -69,16 +70,16 @@ class Control:
                     print(file_path)
                 except:
                     print('ERROR')
-                    pass
             # 启动程序
             os.startfile(file_path)
 
         elif type == '文本':
+            # 控制设备输入文本，暂时只支持Windows
             pyautogui.typewrite(message=message, interval=0.1)
 
         elif type == 'ERROR':
             print('回复文本不符合格式，请检查大模型。')
-        
+
         else:
             print('文本错误')
 
@@ -94,6 +95,7 @@ def api():
     from fastapi import FastAPI, HTTPException, status
     from pydantic import BaseModel
 
+    # 读取系统设置
     settings = setting().get('control')
     port = settings['port']
 
@@ -101,25 +103,31 @@ def api():
     class ModelRequest(BaseModel):
         text: str
 
+    # 创建FastAPI应用
     app = FastAPI()
     # 创建Control实例
     control = Control()
 
+    # 分布式
     @app.post('/control')
     async def device_control_api(request: ModelRequest):
         try:
             text = request.text
+            # 获取文本类型和信息
             type, message = control.extract_message(text)
+            # 控制设备
             control.device_control(type, message)
             return {'type': type, 'message': message}
 
         except Exception:
             raise HTTPException(status_code=500, detail=str(Exception))
-    
+
+    # 模块状态
     @app.get('/control/status')
     async def get_status():
         return status.HTTP_200_OK
 
+    # 启动服务
     import uvicorn
     uvicorn.run(app, host='0.0.0.0', port=port)
 

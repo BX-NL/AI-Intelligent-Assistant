@@ -83,10 +83,12 @@ def api():
     class TTSRequest(BaseModel):
         text: str
 
+    # 创建FastAPI应用
     app = FastAPI()
-    # 创建 TTS 实例
+    # 创建TTS实例
     tts = TTS()
 
+    # 分布式
     @app.post("/tts")
     async def synthesize_and_play_api(request: TTSRequest):
         try:
@@ -109,11 +111,13 @@ def api():
             return {'message': '语音播放成功'}
         except Exception:
             raise HTTPException(status_code=500, detail=str(Exception))
-    
+
+    # 模块状态
     @app.get('/tts/status')
     async def static():
         return status.HTTP_200_OK
 
+    # 启动服务
     import uvicorn
     uvicorn.run(app, host='0.0.0.0', port=port)
 

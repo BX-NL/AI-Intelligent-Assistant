@@ -73,15 +73,18 @@ def api():
         history: list
         user_message: str
 
+    # 创建FastAPI应用
     app = FastAPI()
     # 创建Model实例
     model = Model()
 
+    # 分布式-注入prompt
     @app.get('/model')
     def in_prompt_api():
         history = model.in_prompt()
         return {'history': history}
 
+    # 分布式
     @app.post('/model')
     async def generate_api(request: ModelRequest):
         try:
@@ -92,11 +95,13 @@ def api():
 
         except Exception:
             raise HTTPException(status_code=500, detail=str(Exception))
-    
+
+    # 模块状态
     @app.get('/model/status')
     async def static():
         return status.HTTP_200_OK
 
+    # 启动服务
     import uvicorn
     uvicorn.run(app, host='0.0.0.0', port=port)
 

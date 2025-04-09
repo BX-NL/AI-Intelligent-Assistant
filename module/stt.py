@@ -97,7 +97,7 @@ def debug():
                 current_time = time.time()
                 if current_time - last_press_time > debounce_time:
                     last_press_time = current_time
-                    
+
                     if not is_recording:
                         # 开始录音
                         print('开始录音')
@@ -146,10 +146,12 @@ def api():
     settings = setting().get('STT')
     port = settings['port']
 
+    # 创建FastAPI应用
     app = FastAPI()
-    # 创建 Model 实例
+    # 创建STT实例
     stt = STT()
 
+    # 分布式
     @app.post('/stt')
     async def save_and_transcribe_api(tmpfile: UploadFile = File(...)):
         try:
@@ -167,11 +169,13 @@ def api():
 
         except Exception:
             raise HTTPException(status_code=500, detail=str(Exception))
-    
+
+    # 模块状态
     @app.get('/stt/status')
     async def static():
         return status.HTTP_200_OK
 
+    # 启动服务
     import uvicorn
     uvicorn.run(app, host='0.0.0.0', port=port)
 
