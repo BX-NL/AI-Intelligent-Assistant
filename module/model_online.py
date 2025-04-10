@@ -1,7 +1,7 @@
-import time
-from zhipuai import ZhipuAI
 import os
 import sys
+import time
+from zhipuai import ZhipuAI
 
 # 获取当前文件的绝对路径
 current_dir = os.path.dirname(os.path.abspath(__file__))
@@ -18,7 +18,7 @@ class Model:
         self.settings = setting().get('model')
         # 智普清言的APIkey
         self.api_key = self.settings['zhipuAI_API_key']
-        # test api_key
+        # 测试用api_key
         if self.api_key == '':
             try:
                 with open("api_key.txt", "r") as f:
@@ -37,11 +37,12 @@ class Model:
             {'role': 'system', 'content': prompt},
         ]
 
-    # 注入提示词 # todo 增加问候语，这print太假了
+    # 注入提示词
     def in_prompt(self):
         print('提示词注入中')
         start_time = time.time()
         history = self.messages
+        # todo 增加问候语，这print太假了
         print('[对话]你好，我是爱丽丝')
         print('用时', time.time()-start_time, '秒')
         return history
@@ -109,6 +110,7 @@ def api():
         except Exception:
             raise HTTPException(status_code=500, detail=str(Exception))
 
+    # 模块状态
     @app.get('/model/status')
     async def static():
         return status.HTTP_200_OK

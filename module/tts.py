@@ -47,7 +47,7 @@ class TTS:
         if '[' in text or ']' in text:
             text = text[4:]
 
-        # 异步合成语音
+        # 异步合成语音，异步套异步会炸，先用着下面那种
         # loop = asyncio.new_event_loop()
         # asyncio.set_event_loop(loop)
         # audio_data = loop.run_until_complete(self.synthesize(text))

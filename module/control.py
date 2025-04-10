@@ -14,6 +14,7 @@ from module.config import setting
 
 class Control:
     def __init__(self):
+        # demo 可以在这里加允许使用的应用
         # 系统开始菜单快捷方式
         self.list_sys = {'浏览器': 'Microsoft Edge', }
         # 获取用户名
@@ -25,7 +26,6 @@ class Control:
         pass
 
     def extract_message(self, response_text):
-
         # 正则表达式提取type
         type_pattern = r'\[(.*?)\]'
         type_match = re.search(type_pattern, response_text)

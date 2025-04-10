@@ -112,7 +112,6 @@ def debug():
                         print('录音结束')
                         # 标记录音状态
                         is_recording = False
-                        # with input_lock:
                         with tempfile.NamedTemporaryFile(suffix='.wav', delete=False) as tmpfile:
                             wave_file = wave.open(tmpfile.name, 'wb')
                             wave_file.setnchannels(CHANNELS)
@@ -122,7 +121,7 @@ def debug():
                             wave_file.close()
                             # 语音转文字
                             user_messsage = stt.save_and_transcribe(tmpfile.name)
-                        print('get:', user_messsage)
+                        print('语音转文本:', user_messsage)
 
             # 判断是否录音成功
             if is_recording and stream is not None:

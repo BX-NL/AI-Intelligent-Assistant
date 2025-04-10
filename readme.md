@@ -2,6 +2,8 @@
 
 ## The design and implementation of AI-Intelligent-Assistant which base on ChatGLM
 
+---
+
 ### 介绍 About
 
 这是一段介绍
@@ -161,6 +163,7 @@ Python >= 3.9
     2025-04-07 调整错误信息，修复空信息的bug
     2025-04-08 完成运行状态的接口
     2025-04-09 修复bug，现在分布式和网页可以正常跨设备了，完善代码及注释
+    2025-04-10 完善代码及注释
 
 ---
 

@@ -21,7 +21,7 @@ class Model():
         model_path = self.settings['model_path']
         # 预设的提示词
         self.prompt = self.settings['prompt']
-        # tokenizer.py，原理暂不明确
+        # 加载分词器
         self.tokenizer = AutoTokenizer.from_pretrained(model_path, trust_remote_code=True)
         # int4量化测试可用
         self.model = AutoModel.from_pretrained(model_path, trust_remote_code=True).quantize(bits=4, device="cuda").cuda().eval()

@@ -99,7 +99,7 @@ def main():
                                     wave_file.close()
                                     # 语音转文字
                                     user_messsage = core.transcribe_audio(tmpfile.name)
-                                print('get:', user_messsage)
+                                print('语音转文本:', user_messsage)
                                 # 解除进程锁，标记录音完成
                                 recording_complete.set()
 
