@@ -187,3 +187,6 @@ References/
 
 # Private
 api_key.txt
+
+# Temp
+*.tmp
