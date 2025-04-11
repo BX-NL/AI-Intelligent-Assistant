@@ -26,9 +26,9 @@ class Model():
         # int4量化测试可用
         self.model = AutoModel.from_pretrained(model_path, trust_remote_code=True).quantize(bits=4, device="cuda").cuda().eval()
         # 完整部署
-        # model = AutoModel.from_pretrained(model_path, trust_remote_code=True).half().cuda()
+        # self.model = AutoModel.from_pretrained(model_path, trust_remote_code=True).half().cuda()
         # 多显卡环境下部署
-        # model = AutoModel.from_pretrained(model_path, trust_remote_code=True, device_map="auto").quantize(bits=8, device="cuda").cuda().eval()
+        # self.model = AutoModel.from_pretrained(model_path, trust_remote_code=True, device_map="auto").quantize(bits=8, device="cuda").cuda().eval()
 
     def in_prompt(self):
         print('提示词注入中')
@@ -39,6 +39,8 @@ class Model():
         # 输出问候语
         print(response)
         print('用时', time.time()-start_time, '秒')
+        # todo 返回问候语
+        # return response, history
         return history
 
     def generate(self, history, user_message):
