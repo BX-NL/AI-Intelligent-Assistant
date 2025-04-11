@@ -1,8 +1,9 @@
-from transformers import AutoTokenizer, AutoModel
-from cpm_kernels.kernels.base import round_up
-import time
 import os
 import sys
+import time
+from transformers import AutoTokenizer, AutoModel
+# ? 不知道干啥用的，好像是哪里忘记删了
+# from cpm_kernels.kernels.base import round_up
 
 # 获取当前文件的绝对路径
 current_dir = os.path.dirname(os.path.abspath(__file__))

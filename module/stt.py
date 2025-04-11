@@ -1,10 +1,10 @@
-import pyaudio
+import os
+import sys
 import wave
+import pyaudio
 import keyboard
 from funasr import AutoModel
 from funasr.utils.postprocess_utils import rich_transcription_postprocess
-import os
-import sys
 
 # 获取当前文件的绝对路径
 current_dir = os.path.dirname(os.path.abspath(__file__))
@@ -14,8 +14,6 @@ work_dir = os.path.dirname(current_dir)
 sys.path.append(work_dir)
 # 导入模块
 from module.config import setting
-# from module.core import Core
-
 
 class STT():
     def __init__(self):

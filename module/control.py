@@ -74,7 +74,7 @@ class Control:
             os.startfile(file_path)
 
         elif type == '文本':
-            # 控制设备输入文本，暂时只支持Windows
+            # 控制设备输入文本
             pyautogui.typewrite(message=message, interval=0.1)
 
         elif type == 'ERROR':
