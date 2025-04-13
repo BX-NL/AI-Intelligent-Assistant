@@ -10,6 +10,8 @@
 
 Here is an introduction
 
+一个人工智能助理，支持ChatGLM，支持智普清言API，缝合了FunASR、Edge-TTS，代码跟史一样，将就着用。
+
 ---
 
 ### 安装依赖 Install dependencies
@@ -166,6 +168,7 @@ Python >= 3.9
     2025-04-10 完善代码及注释
     2025-04-11 完善代码及注释，修复bug，完善iodraw文件
     2025-04-12 修复若干bug
+    2025-04-13 更新Readme，添加License
 
 ---
 
@@ -192,3 +195,8 @@ Python >= 3.9
 [显卡]()
 
 >感谢我那张壮烈牺牲的GeForce GTX1060-6GD5，炼个丹要老命了
+
+### 协议 License
+
+GNU GPLv3
+[License](./LICENSE)
