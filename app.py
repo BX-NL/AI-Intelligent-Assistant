@@ -74,14 +74,16 @@ def upload_audio():
 # 获取模块状态
 @app.route('/get_status', methods=['GET'])
 def get_status():
-    # 模拟模块状态
+    # 获取模块状态
+    status_list = core.get_module_status()
+    # todo 顺序好像有点问题，有空再改
     status = {
-        'module1': '运行中',
-        'module2': '运行中',
-        'module3': '运行中',
-        'module4': '运行中',
-        'module5': '运行中',
-        'module6': '运行中',
+        '服务端': 'Local',
+        '当前连接': 'Local',
+        'Model': status_list[0],
+        'STT': status_list[1],
+        'TTS': status_list[2],
+        'control': status_list[3],
     }
     return jsonify(status)
 
