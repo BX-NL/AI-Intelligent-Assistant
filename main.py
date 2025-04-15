@@ -20,9 +20,6 @@ def main():
     print('系统初始化中')
     # 初始化核心模块
     core = Core()
-    # 初始化语音转文字模块
-    # || 这行不能删，不然跑不起来，我也不知道为什么Core那边没把这玩意也init
-    stt = STT()
     # 初始化音频库
     audio = pyaudio.PyAudio()
     # 初始化大模型

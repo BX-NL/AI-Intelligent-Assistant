@@ -16,7 +16,9 @@ app = Flask(__name__)
 
 # 初始化核心模块
 core = Core()
-stt = STT()  # 必须初始化，否则无法运行
+# || 这行不能删，不然跑不起来，我也不知道为什么Core那边没把这玩意也init
+# ! 好像莫名其妙又好了，先留个备份，以后再看看
+stt = STT()
 audio = pyaudio.PyAudio()
 
 # 全局变量
