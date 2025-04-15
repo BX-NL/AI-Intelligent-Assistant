@@ -140,7 +140,14 @@ def main():
     # 开始
     while not exit_program:
         user_messsage = ''
-        print('输入文本或按下', hotkey, '开始语音输入')
+        # 刷新一次模块状态
+        status_list = core.get_module_status()
+        print('============模块状态============')
+        print('Model: ', status_list[0], '   STT: ', status_list[1])
+        print('TTS:   ', status_list[2], '   control: ', status_list[3])
+        print('================================')
+        # 用户输入
+        print('输入文本或按下', hotkey, '开始语音输入:')
         # 进程锁
         recording_complete.wait()
         recording_complete.clear()
