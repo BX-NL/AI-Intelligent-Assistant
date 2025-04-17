@@ -35,6 +35,24 @@ class Core:
             self.distribute_stt = self.settings_stt['mode']
             self.distribute_tts = self.settings_tts['mode']
             self.distribute_control = self.settings_control['mode']
+
+            # 获取各模块分布式接口
+            if self.distribute_model == 'online':
+                IP = self.settings_model['IP']
+                port = str(self.settings_model['port'])
+                self.url_model = 'http://' + IP + ':' + port + '/model'
+            if self.distribute_stt == 'online':
+                IP = self.settings_stt['IP']
+                port = str(self.settings_stt['port'])
+                self.url_stt = 'http://' + IP + ':' + port + '/stt'
+            if self.distribute_tts == 'online':
+                IP = self.settings_tts['IP']
+                port = str(self.settings_tts['port'])
+                self.url_tts = 'http://' + IP + ':' + port + '/tts'
+            if self.distribute_control == 'online':
+                IP = self.settings_control['IP']
+                port = str(self.settings_control['port'])
+                self.url_control = 'http://' + IP + ':' + port + '/control'
         else:
             # 覆写分布式设置
             self.distribute_model = 'offline'
@@ -52,16 +70,12 @@ class Core:
             text = self.stt.save_and_transcribe(audio_path)
 
         elif self.distribute_stt == 'online':
-            # 配置STT的分布式接口
-            IP = self.settings_stt['IP']
-            port = str(self.settings_stt['port'])
-            url = 'http://' + IP + ':' + port + '/stt'
-
             # 以二进制模式打开文件
             with open(audio_path, 'rb') as tmpfile:
                 # 使用 multipart/form-data 格式上传文件
                 file = {'tmpfile': tmpfile}
-                response = requests.post(url, files=file)
+                # 连接至STT的分布式接口
+                response = requests.post(self.url_stt, files=file)
                 tmpfile.close()
             # 获取转换后的文字
             text = response.json()['user_message']
@@ -75,12 +89,8 @@ class Core:
             history = self.model.in_prompt()
 
         elif self.distribute_model == 'online':
-            # 配置大模型的分布式接口
-            IP = self.settings_model['IP']
-            port = str(self.settings_model['port'])
-            url = 'http://' + IP + ':' + port + '/model'
-
-            response = requests.get(url)
+            # 连接至大模型的分布式接口
+            response = requests.get(self.url_model)
             history = response.json()['history']
         else:
             print('Error Setting: [model]')
@@ -96,13 +106,9 @@ class Core:
             new_message, self.history = self.model.generate(history, text)
 
         elif self.distribute_model == 'online':
-            # 配置大模型的分布式接口
-            IP = self.settings_model['IP']
-            port = str(self.settings_model['port'])
-            url = 'http://' + IP + ':' + port + '/model'
-
+            # 连接至大模型的分布式接口
             data = {'history': history, 'user_message': text}
-            response = requests.post(url, json=data)
+            response = requests.post(self.url_model, json=data)
             new_message = response.json()['new_message']
             self.history = response.json()['history']
         else:
@@ -115,13 +121,9 @@ class Core:
             self.tts.synthesize_and_play(text)
 
         elif self.distribute_tts == 'online':
-            # 配置TTS的分布式接口
-            IP = self.settings_tts['IP']
-            port = str(self.settings_tts['port'])
-            url = 'http://' + IP + ':' + port + '/tts'
-
+            # 连接至TTS的分布式接口
             data = {'text': text}
-            requests.post(url, json=data)
+            requests.post(self.url_tts, json=data)
         else:
             print('Error Setting: [TTS]')
 
@@ -131,13 +133,9 @@ class Core:
             self.control.device_control(type, message)
 
         elif self.distribute_control == 'online':
-            # 配置控制模块的分布式接口
-            IP = self.settings_control['IP']
-            port = str(self.settings_control['port'])
-            url = 'http://' + IP + ':' + port + '/control'
-
+            # 连接至控制模块的分布式接口
             data = {'text': text}
-            requests.post(url, json=data)
+            requests.post(self.url_control, json=data)
         else:
             print('Error Setting: [control]')
     
@@ -149,11 +147,8 @@ class Core:
         if self.distribute_model == 'offline':
             statu = 'Local'
         elif self.distribute_model == 'online':
-            IP = self.settings_model['IP']
-            port = str(self.settings_model['port'])
-            url = 'http://' + IP + ':' + port + '/model/status'
             try:
-                response = requests.get(url)
+                response = requests.get(self.url_model + '/status')
                 if response.status_code == 200:
                     statu = 'Remote'
             except:
@@ -166,11 +161,8 @@ class Core:
         if self.distribute_stt == 'offline':
             statu = 'Local'
         elif self.distribute_stt == 'online':
-            IP = self.settings_stt['IP']
-            port = str(self.settings_stt['port'])
-            url = 'http://' + IP + ':' + port + '/stt/status'
             try:
-                response = requests.get(url)
+                response = requests.get(self.url_stt + '/status')
                 if response.status_code == 200:
                     statu = 'Remote'
             except:
@@ -183,11 +175,8 @@ class Core:
         if self.distribute_tts == 'offline':
             statu = 'Local'
         elif self.distribute_tts == 'online':
-            IP = self.settings_tts['IP']
-            port = str(self.settings_tts['port'])
-            url = 'http://' + IP + ':' + port + '/tts/status'
             try:
-                response = requests.get(url)
+                response = requests.get(self.url_tts + '/status')
                 if response.status_code == 200:
                     statu = 'Remote'
             except:
@@ -200,11 +189,8 @@ class Core:
         if self.distribute_control == 'offline':
             statu = 'Local'
         elif self.distribute_control == 'online':
-            IP = self.settings_control['IP']
-            port = str(self.settings_control['port'])
-            url = 'http://' + IP + ':' + port + '/control/status'
             try:
-                response = requests.get(url)
+                response = requests.get(self.url_control + '/status')
                 if response.status_code == 200:
                     statu = 'Remote'
             except:
