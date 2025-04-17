@@ -1,30 +1,28 @@
 from flask import Flask, render_template, request, jsonify
 import threading
 import pyaudio
-import keyboard
-# from core import Core
-# from stt import STT
+# import keyboard
 from module.core import Core
-from module.stt import STT
-from module.tts import TTS
-from module.config import setting
-from module.control import Control
+# from module.stt import STT
+# from module.tts import TTS
+# from module.config import setting
+# from module.control import Control
 import tempfile
-import wave
+# import wave
 
+# 创建Flask应用
 app = Flask(__name__)
 
 # 初始化核心模块
 core = Core()
-# || 这行不能删，不然跑不起来，我也不知道为什么Core那边没把这玩意也init
-# ! 好像莫名其妙又好了，先留个备份，以后再看看
-# stt = STT()
+# 初始化音频模块
 audio = pyaudio.PyAudio()
 
-# 全局变量
-history = core.get_in_prompt()  # 初始化 history
-input_lock = threading.Lock()
-recording_complete = threading.Event()
+# 初始化 history
+history = core.get_in_prompt()
+# 忘记用来做什么的了，先留个注释
+# input_lock = threading.Lock()
+# recording_complete = threading.Event()
 
 
 # 首页路由
@@ -42,7 +40,9 @@ def chat():
 # 处理用户输入
 @app.route('/send_message', methods=['POST'])
 def send_message():
-    global history  # 使用全局的 history 变量
+    # 使用全局的 history 变量
+    global history
+    # 获取用户输入
     data = request.json
     user_input = data.get('message')
 
