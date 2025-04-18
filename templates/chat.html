@@ -142,6 +142,25 @@
             // 添加AI响应到对话记录
             chatHistory.innerHTML += `<div class="message bot-message">${data.response}</div>`;
             chatHistory.scrollTop = chatHistory.scrollHeight;
+
+            // 播放音频
+            if (data.audio) {
+                try {
+                    // 解码base64音频数据
+                    const binaryStr = atob(data.audio);
+                    const bytes = new Uint8Array(binaryStr.length);
+                    for (let i = 0; i < binaryStr.length; i++) {
+                        bytes[i] = binaryStr.charCodeAt(i);
+                    }
+                    const blob = new Blob([bytes], { type: 'audio/wav' });
+                    const audioUrl = URL.createObjectURL(blob);
+                    
+                    const audio = new Audio(audioUrl);
+                    audio.play().catch(e => console.error('播放失败:', e));
+                } catch (error) {
+                    console.error('音频处理错误:', error);
+                }
+            }
         }
 
         // 切换录音状态

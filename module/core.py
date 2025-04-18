@@ -116,16 +116,19 @@ class Core:
 
         return new_message, self.history
 
-    def synthesize_and_play(self, text):
+    def synthesize(self, text):
         if self.distribute_tts == 'offline':
-            self.tts.synthesize_and_play(text)
+            audio_data_base64 = self.tts.synthesize_and_play(text)
 
         elif self.distribute_tts == 'online':
             # 连接至TTS的分布式接口
             data = {'text': text}
-            requests.post(self.url_tts, json=data)
+            response = requests.post(self.url_tts, json=data)
+            audio_data_base64 = response.json()['audio']
+
         else:
             print('Error Setting: [TTS]')
+        return audio_data_base64
 
     def system_control(self, text):
         if self.distribute_control == 'offline':
