@@ -1,14 +1,7 @@
-from flask import Flask, render_template, request, jsonify
-import threading
 import pyaudio
-# import keyboard
-from module.core import Core
-# from module.stt import STT
-# from module.tts import TTS
-# from module.config import setting
-# from module.control import Control
 import tempfile
-# import wave
+from flask import Flask, render_template, request, jsonify
+from module.core import Core
 
 # 创建Flask应用
 app = Flask(__name__)
@@ -20,10 +13,6 @@ audio = pyaudio.PyAudio()
 
 # 初始化 history
 history = core.get_in_prompt()
-# 忘记用来做什么的了，先留个注释
-# input_lock = threading.Lock()
-# recording_complete = threading.Event()
-
 
 # 首页路由
 @app.route('/')
