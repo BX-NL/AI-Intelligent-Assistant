@@ -2,6 +2,7 @@ import io
 import os
 import sys
 import time
+import base64
 import asyncio
 import tempfile
 import edge_tts
@@ -42,6 +43,7 @@ class TTS:
 
         return stream
 
+    # todo 整不明白异步，临时使用这个转回同步来使用
     def synthesize_and_play(self, text):
         # 合成语音时去除回复类型
         if '[' in text or ']' in text:
@@ -52,18 +54,22 @@ class TTS:
         # asyncio.set_event_loop(loop)
         # audio_data = loop.run_until_complete(self.synthesize(text))
 
+        # 异步合成语音
         audio_data = asyncio.run(self.synthesize(text))
+        # 将音频数据转为base64编码并返回
+        audio_data_base64 = base64.b64encode(audio_data).decode('utf-8')
+        return audio_data_base64
 
-        # 将音频数据保存到临时文件
-        with tempfile.NamedTemporaryFile(suffix='.mp3', delete=False) as tmpfile:
-            tmpfile.write(audio_data)
-            tmpfile_path = tmpfile.name
-            # 等待0.5秒避免文件未写入完成
-            time.sleep(0.5)
+        # # 将音频数据保存到临时文件
+        # with tempfile.NamedTemporaryFile(suffix='.mp3', delete=False) as tmpfile:
+        #     tmpfile.write(audio_data)
+        #     tmpfile_path = tmpfile.name
+        #     # 等待0.5秒避免文件未写入完成
+        #     time.sleep(0.5)
 
-        # 使用 playsound 播放音频
-        # 可换pygame库避免临时文件
-        playsound(tmpfile_path)
+        # # 使用 playsound 播放音频
+        # # 可换pygame库避免临时文件
+        # playsound(tmpfile_path)
 
 def debug():
     tts = TTS()
@@ -98,17 +104,20 @@ def api():
                 text = text[4:]
             # 异步合成语音
             audio_data = await tts.synthesize(text)
+            # 将音频数据转为base64编码并返回
+            audio_data_base64 = base64.b64encode(audio_data).decode('utf-8')
             # todo 为了分布式进行的妥协，后续尝试不用playsound，异步套异步会报错
-            # 将音频数据保存到临时文件
-            with tempfile.NamedTemporaryFile(suffix='.mp3', delete=False) as tmpfile:
-                tmpfile.write(audio_data)
-                tmpfile_path = tmpfile.name
-                # 等待0.5秒避免文件未写入完成
-                time.sleep(0.5)
+            # todo 待删除，这段的播放功能转前端了
+            # # 将音频数据保存到临时文件
+            # with tempfile.NamedTemporaryFile(suffix='.mp3', delete=False) as tmpfile:
+            #     tmpfile.write(audio_data)
+            #     tmpfile_path = tmpfile.name
+            #     # 等待0.5秒避免文件未写入完成
+            #     time.sleep(0.5)
 
-            # 使用 playsound 播放音频
-            playsound(tmpfile_path)
-            return {'message': '语音播放成功'}
+            # # 使用 playsound 播放音频
+            # playsound(tmpfile_path)
+            return {'audio': audio_data_base64}
         except Exception:
             raise HTTPException(status_code=500, detail=str(Exception))
 
