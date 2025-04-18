@@ -2,7 +2,7 @@ import pyaudio
 import tempfile
 from flask import Flask, render_template, request, jsonify
 from module.core import Core
-
+# import base64
 # 创建Flask应用
 app = Flask(__name__)
 
@@ -35,17 +35,20 @@ def send_message():
     data = request.json
     user_input = data.get('message')
 
-    if user_input.lower() == 'exit':
-        return jsonify({'response': '会话已结束'})
+    # 这个不需要了
+    # if user_input.lower() == 'exit':
+    #     return jsonify({'response': '会话已结束'})
 
     # 生成响应
     response_text, history = core.generate_response(history, user_input)
     # todo 尝试修改为先返回再播放
-    core.synthesize_and_play(response_text)
+    audio_data_base64 = core.synthesize(response_text)
+    # 音频流数据转base64编码
+    # audio_data_base64 = base64.b64encode(audio_data).decode('utf-8')
     # ! 这行好像用不了
     # core.system_control(response_text)
 
-    return jsonify({'response': response_text})
+    return jsonify({'response': response_text, 'audio': audio_data_base64})
 
 
 # 处理音频上传
@@ -81,4 +84,4 @@ def get_status():
 
 if __name__ == '__main__':
     # ! 当debug =True时，各个模块会被实例化两次，暂不影响使用，实际部署时可改为False
-    app.run(debug=True, host='0.0.0.0')
+    app.run(debug=False, host='0.0.0.0')

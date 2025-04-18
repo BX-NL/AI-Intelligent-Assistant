@@ -5,14 +5,17 @@ import pyaudio
 import threading
 import tempfile
 import wave
+import base64
+import asyncio
+from playsound import playsound
 # import uvicorn
-from fastapi import FastAPI
-from funasr import AutoModel
+# from fastapi import FastAPI
+# from funasr import AutoModel
 from module.core import Core
-from module.stt import STT
-from module.tts import TTS
+# from module.stt import STT
+# from module.tts import TTS
 from module.config import setting
-from module.control import Control
+# from module.control import Control
 
 
 def main():
@@ -137,6 +140,20 @@ def main():
     threading.Thread(target=hotkey_to_record, daemon=True).start()
     threading.Thread(target=listen_for_text, daemon=True).start()
 
+    async def play_audio(audio_data_base64):
+        # 将base64编码的数据转回音频数据
+        audio_data = base64.b64decode(audio_data_base64)
+        # 将音频数据保存到临时文件
+        with tempfile.NamedTemporaryFile(suffix='.mp3', delete=False) as tmpfile:
+            tmpfile.write(audio_data)
+            tmpfile_path = tmpfile.name
+            # 等待0.5秒避免文件未写入完成
+            time.sleep(0.5)
+
+        # 使用 playsound 播放音频
+        # 可换pygame库避免临时文件
+        playsound(tmpfile_path)
+
     # 开始
     while not exit_program:
         user_messsage = ''
@@ -162,7 +179,9 @@ def main():
         print('大模型回复:', new_message)
 
         # 文本转语音并播放
-        core.synthesize_and_play(new_message)
+        audio_data_base64 = core.synthesize(new_message)
+        # 异步了但没完全异步，有空再改
+        asyncio.run(play_audio(audio_data_base64))
         print('语音播放完成。')
 
         # 执行命令
