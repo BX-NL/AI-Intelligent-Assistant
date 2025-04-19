@@ -1,5 +1,7 @@
 import requests
-import warnings
+# todo 控制台日志
+# import logging
+# import colorlog
 from .config import setting
 # 读取系统设置
 settings = setting()
@@ -128,6 +130,7 @@ class Core:
 
         else:
             print('Error Setting: [TTS]')
+
         return audio_data_base64
 
     def system_control(self, text):
@@ -141,7 +144,7 @@ class Core:
             requests.post(self.url_control, json=data)
         else:
             print('Error Setting: [control]')
-    
+
     def get_module_status(self):
         # 脑子转不过来了，有空再弄，先这么跑着吧
         status = []
@@ -203,7 +206,7 @@ class Core:
         status.append(statu)
 
         return status
-        
+
 
 if __name__ == '__main__':
     print('Error Running: core')
