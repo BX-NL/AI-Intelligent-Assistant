@@ -104,9 +104,7 @@ Python >= 3.9
         chat.html
     static/
         css/
-            style.css
         js/
-            script.js
     main.py
     app.py
     readme.md
