@@ -1,8 +1,11 @@
 import requests
 # todo 控制台日志
-# import logging
+import logging
 # import colorlog
 from .config import setting
+# logging配置
+logging.basicConfig(level = logging.INFO,format = '%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+logger = logging.getLogger(__name__)
 # 读取系统设置
 settings = setting()
 # 读取分布式设置
@@ -21,7 +24,7 @@ if settings_distribute == False:
     elif settings_model['LLM'] == 'online':
         from .model_online import Model
     else:
-        print('Error Import: model')
+        logging.error('Error Import: model')
 
 
 class Core:
@@ -82,7 +85,7 @@ class Core:
             # 获取转换后的文字
             text = response.json()['user_message']
         else:
-            print('Error Setting: [STT]')
+            logging.error('Error Setting: STT')
 
         return text
 
@@ -95,7 +98,7 @@ class Core:
             response = requests.get(self.url_model)
             history = response.json()['history']
         else:
-            print('Error Setting: [model]')
+            logging.error('Error Setting: Model')
 
         return history
 
@@ -114,7 +117,7 @@ class Core:
             new_message = response.json()['new_message']
             self.history = response.json()['history']
         else:
-            print('Error Setting: [model]')
+            logging.error('Error Setting: Model')
 
         return new_message, self.history
 
@@ -129,7 +132,7 @@ class Core:
             audio_data_base64 = response.json()['audio']
 
         else:
-            print('Error Setting: [TTS]')
+            logging.error('Error Setting: TTS')
 
         return audio_data_base64
 
@@ -143,7 +146,7 @@ class Core:
             data = {'text': text}
             requests.post(self.url_control, json=data)
         else:
-            print('Error Setting: [control]')
+            logging.error('Error Setting: Control')
 
     def get_module_status(self):
         # 脑子转不过来了，有空再弄，先这么跑着吧
@@ -160,7 +163,7 @@ class Core:
             except:
                 statu = 'Error'
         else:
-            print('Error Setting: [model]')
+            logging.error('Error Setting: Model')
         status.append(statu)
 
         # STT
@@ -174,7 +177,7 @@ class Core:
             except:
                 statu = 'Error'
         else:
-            print('Error Setting: [STT]')
+            logging.error('Error Setting: STT')
         status.append(statu)
 
         # TTS
@@ -188,7 +191,7 @@ class Core:
             except:
                 statu = 'Error'
         else:
-            print('Error Setting: [TTS]')
+            logging.error('Error Setting: TTS')
         status.append(statu)
 
         # control
@@ -202,11 +205,11 @@ class Core:
             except:
                 statu = 'Error'
         else:
-            print('Error Setting: [control]')
+            logging.error('Error Setting: Control')
         status.append(statu)
 
         return status
 
 
 if __name__ == '__main__':
-    print('Error Running: core')
+    logging.error('Error Running: Core')
