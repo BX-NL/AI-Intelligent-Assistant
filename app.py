@@ -43,8 +43,6 @@ def send_message():
     response_text, history = core.generate_response(history, user_input)
     # todo 尝试修改为先返回再播放
     audio_data_base64 = core.synthesize(response_text)
-    # 音频流数据转base64编码
-    # audio_data_base64 = base64.b64encode(audio_data).decode('utf-8')
     # ! 这行好像用不了
     # core.system_control(response_text)
 

@@ -1,12 +1,12 @@
 import io
 import os
 import sys
-import time
+# import time
 import base64
 import asyncio
-import tempfile
+# import tempfile
 import edge_tts
-from playsound import playsound
+# from playsound import playsound
 
 # 获取当前文件的绝对路径
 current_dir = os.path.dirname(os.path.abspath(__file__))

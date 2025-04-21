@@ -9,14 +9,8 @@ import base64
 import asyncio
 import logging
 from playsound import playsound
-# import uvicorn
-# from fastapi import FastAPI
-# from funasr import AutoModel
 from module.core import Core
-# from module.stt import STT
-# from module.tts import TTS
 from module.config import setting
-# from module.control import Control
 
 
 def main():
