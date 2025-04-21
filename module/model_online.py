@@ -1,6 +1,7 @@
 import os
 import sys
 import time
+import logging
 from zhipuai import ZhipuAI
 
 # 获取当前文件的绝对路径
@@ -24,7 +25,7 @@ class Model:
                 with open("api_key.txt", "r") as f:
                     self.api_key = f.readline()
             except:
-                print('缺少api_key')
+                logging.error('API Missing')
         # 智普清言的模型选用
         self.model = self.settings['zhipuAI_model']
         # 设置连接
@@ -39,7 +40,7 @@ class Model:
 
     # 注入提示词
     def in_prompt(self):
-        print('提示词注入中')
+        logging.info('提示词注入中')
         start_time = time.time()
         history = self.messages
         # todo 增加问候语，这print太假了
@@ -49,7 +50,8 @@ class Model:
 
     # 传入用户输入的文本并获取回复
     def generate(self, history, user_message):
-        # 清空消息
+        logging.info('模型推理中')
+        # 清空旧消息
         new_message = ''
         # 记录历史信息
         history.append({'role': 'user', 'content': user_message})

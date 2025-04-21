@@ -7,6 +7,7 @@ import tempfile
 import wave
 import base64
 import asyncio
+import logging
 from playsound import playsound
 # import uvicorn
 # from fastapi import FastAPI
@@ -28,6 +29,7 @@ def main():
     # 初始化大模型
     print('大模型初始化中')
     # 根据setting里选用的model和prompt
+    # todo 需要try，移到后面
     history = core.get_in_prompt()
 
     # 存储用户输入的文本
@@ -152,6 +154,7 @@ def main():
 
         # 使用 playsound 播放音频
         # 可换pygame库避免临时文件
+        # todo 需要try，存在可能的报错
         playsound(tmpfile_path)
 
     # 开始
@@ -176,17 +179,20 @@ def main():
 
         # 模型生成响应
         new_message, history = core.generate_response(history, user_messsage)
-        print('大模型回复:', new_message)
+        # print('大模型回复:', )
+        logging.info('大模型回复' + new_message)
 
         # 文本转语音并播放
         audio_data_base64 = core.synthesize(new_message)
         # 异步了但没完全异步，有空再改
         asyncio.run(play_audio(audio_data_base64))
-        print('语音播放完成。')
+        # print('语音播放完成。')
+        logging.info('语音播放完成')
 
         # 执行命令
         core.system_control(new_message)
-        print('指令执行完毕')
+        # print('指令执行完毕')
+        logging.info('指令执行完毕')
 
 # 运行程序
 if __name__ == '__main__':

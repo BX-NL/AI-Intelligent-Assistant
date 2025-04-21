@@ -1,6 +1,7 @@
 import os
 import sys
 import time
+import logging
 from transformers import AutoTokenizer, AutoModel
 # ? 不知道干啥用的，好像是哪里忘记删了
 # from cpm_kernels.kernels.base import round_up
@@ -32,7 +33,7 @@ class Model():
         # self.model = AutoModel.from_pretrained(model_path, trust_remote_code=True, device_map="auto").quantize(bits=8, device="cuda").cuda().eval()
 
     def in_prompt(self):
-        print('提示词注入中')
+        logging.info('提示词注入中')
         # 记录推理时间
         start_time = time.time()
         # 注入提示词
@@ -45,7 +46,7 @@ class Model():
         return history
 
     def generate(self, history, user_message):
-        print('推理中')
+        logging.info('模型推理中')
         # 记录推理时间
         start_time = time.time()
         # 传入用户输入的文本并获取回复

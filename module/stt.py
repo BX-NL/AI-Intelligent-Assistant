@@ -2,6 +2,7 @@ import os
 import sys
 import wave
 import pyaudio
+import logging
 import keyboard
 from funasr import AutoModel
 from funasr.utils.postprocess_utils import rich_transcription_postprocess
@@ -45,7 +46,8 @@ class STT():
         )
         # 获取返回结果
         text = rich_transcription_postprocess(response[0]['text'])
-        print('识别结果:', text)
+        logging.info('识别结果:' + text)
+        # print('识别结果:', text)
         return text
 
 
