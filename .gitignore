@@ -180,6 +180,7 @@ model_test.py
 *.doc
 *.docx
 *.pptx
+*.pdf
 
 # 其它
 Backup/
