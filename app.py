@@ -1,4 +1,4 @@
-import pyaudio
+# import pyaudio
 import tempfile
 from flask import Flask, render_template, request, jsonify
 from module.core import Core
@@ -9,7 +9,7 @@ app = Flask(__name__)
 # 初始化核心模块
 core = Core()
 # 初始化音频模块
-audio = pyaudio.PyAudio()
+# audio = pyaudio.PyAudio()
 
 # 初始化 history
 history = core.get_in_prompt()
@@ -34,10 +34,6 @@ def send_message():
     # 获取用户输入
     data = request.json
     user_input = data.get('message')
-
-    # 这个不需要了
-    # if user_input.lower() == 'exit':
-    #     return jsonify({'response': '会话已结束'})
 
     # 生成响应
     response_text, history = core.generate_response(history, user_input)
