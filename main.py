@@ -8,20 +8,25 @@ import wave
 import base64
 import asyncio
 import logging
+# import colorlog
 from playsound import playsound
 from module.core import Core
 from module.config import setting
 
+# logging配置
+logging.basicConfig(level = logging.INFO,format = '%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+logger = logging.getLogger(__name__)
 
 def main():
+    
     # 初始化各模块
-    print('系统初始化中')
+    logging.info('系统初始化中')
     # 初始化核心模块
     core = Core()
     # 初始化音频库
     audio = pyaudio.PyAudio()
     # 初始化大模型
-    print('大模型初始化中')
+    logging.info('大模型初始化中')
     # 根据setting里选用的model和prompt
     # todo 需要try，移到后面
     history = core.get_in_prompt()
@@ -73,7 +78,7 @@ def main():
                         
                         if not is_recording:
                             # 开始录音
-                            print('开始录音')
+                            logging.info('开始录音')
                             # 标记录音状态
                             is_recording = True
                             # 开始记录音频流
@@ -82,7 +87,7 @@ def main():
                             frames = []
                         else:
                             # 结束录音
-                            print('录音结束')
+                            logging.info('录音结束')
                             # 标记录音状态
                             is_recording = False
                             with input_lock:
@@ -95,7 +100,7 @@ def main():
                                     wave_file.close()
                                     # 语音转文字
                                     user_messsage = core.transcribe_audio(tmpfile.name)
-                                print('语音转文本:', user_messsage)
+                                logging.info('语音转文本:' + user_messsage)
                                 # 解除进程锁，标记录音完成
                                 recording_complete.set()
 
@@ -128,7 +133,7 @@ def main():
                 break
             with input_lock:
                 user_messsage = user_input
-                print('用户输入:', user_messsage)
+                logging.info('用户输入:' + user_messsage)
                 # 解除进程锁，标记文本输入完成
                 recording_complete.set()
 
