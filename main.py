@@ -18,19 +18,8 @@ logging.basicConfig(level = logging.INFO,format = '%(asctime)s - %(name)s - %(le
 logger = logging.getLogger(__name__)
 
 def main():
-    
-    # 初始化各模块
+    # 系统初始化
     logging.info('系统初始化中')
-    # 初始化核心模块
-    core = Core()
-    # 初始化音频库
-    audio = pyaudio.PyAudio()
-    # 初始化大模型
-    logging.info('大模型初始化中')
-    # 根据setting里选用的model和prompt
-    # todo 需要try，移到后面
-    history = core.get_in_prompt()
-
     # 存储用户输入的文本
     user_messsage = ''
     # 判断是否退出 # todo 这个可能要改
@@ -40,6 +29,8 @@ def main():
     # 进程锁，用于标记录音是否完成
     recording_complete = threading.Event()
 
+    # 初始化音频库
+    audio = pyaudio.PyAudio()
     # 录音设置 # todo 考虑移到setting里
     # 16位音频格式、单声道、采样率、每个数据块包含的帧数
     FORMAT = pyaudio.paInt16
@@ -48,14 +39,30 @@ def main():
     CHUNK = 1024
 
     # 读取系统设置，快捷键
-    settings = setting().get('STT')
-    hotkey = settings['hotkey']
+    settings = setting()
+    settings_stt =settings.get('STT')
+    hotkey = settings_stt['hotkey']
+
+    # 加载各模块
+    logging.info('系统模块初始化中')
+    # 初始化核心模块
+    core = Core()
+    # 初始化大模型
+    logging.info('大模型初始化中')
+    # 根据setting里选用的model和prompt
+    # 加载大模型
+    # todo 需要try中断
+    try:
+        history = core.get_in_prompt()
+    except:
+        logging.error('大模型加载失败，请检查配置文件')
 
     # 录音输入
     def hotkey_to_record():
 
         nonlocal user_messsage, exit_program
 
+        # todo 移到def外
         # 音频帧
         frames = []
         # 音频流
