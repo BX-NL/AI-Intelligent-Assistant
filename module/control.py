@@ -1,7 +1,9 @@
 import re
 import os
 import sys
+import time
 import pyautogui
+import pyperclip
 
 # 获取当前文件的绝对路径
 current_dir = os.path.dirname(os.path.abspath(__file__))
@@ -74,8 +76,16 @@ class Control:
             os.startfile(file_path)
 
         elif type == '文本':
-            # 控制设备输入文本
-            pyautogui.typewrite(message=message, interval=0.1)
+            #控制设备输入文本
+            for char in message:
+                # 逐字复制到剪贴板
+                pyperclip.copy(char)
+                # 逐字粘贴
+                pyautogui.hotkey('ctrl', 'v')
+                # 稍微延时一点点
+                time.sleep(0.05)
+                # 控制设备输入文本，这个打不了中文
+                # pyautogui.typewrite(message=message, interval=0.1)
 
         elif type == 'ERROR':
             print('回复文本不符合格式，请检查大模型。')
@@ -85,7 +95,7 @@ class Control:
 
 def debug():
     control = Control()
-    response_text = '[文本]This is an test message!'
+    response_text = '[文本]早上好，我喜欢你!'
     response_text = '[指令]启动浏览器'
     type, message = control.extract_message(response_text)
     print(type, message)
