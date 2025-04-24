@@ -44,7 +44,7 @@ class Core:
             # 初始化各模块，获取各模块分布式接口
             if self.distribute_model == 'offline':
                 self.model = Model()
-                logging.info('Module Local Model: ' + IP + ':' + port)
+                logging.info('Module Local Model')
             elif self.distribute_model == 'online':
                 IP = self.settings_model['IP']
                 port = str(self.settings_model['port'])
@@ -53,7 +53,7 @@ class Core:
 
             if self.distribute_stt == 'offline':
                 self.stt = STT()
-                logging.info('Module Local STT: ' + IP + ':' + port)
+                logging.info('Module Local STT')
             elif self.distribute_stt == 'online':
                 IP = self.settings_stt['IP']
                 port = str(self.settings_stt['port'])
@@ -62,7 +62,7 @@ class Core:
 
             if self.distribute_tts == 'offline':
                 self.tts = TTS()
-                logging.info('Module Local TTS: ' + IP + ':' + port)
+                logging.info('Module Local TTS')
             elif self.distribute_tts == 'online':
                 IP = self.settings_tts['IP']
                 port = str(self.settings_tts['port'])
@@ -70,8 +70,9 @@ class Core:
                 logging.info('Module Distribute TTS: ' + IP + ':' + port)
 
             if self.distribute_control == 'offline':
+                from .control import Control
                 self.control = Control()
-                logging.info('Module Local Control: ' + IP + ':' + port)
+                logging.info('Module Local Control: ')
             elif self.distribute_control == 'online':
                 IP = self.settings_control['IP']
                 port = str(self.settings_control['port'])
@@ -91,6 +92,7 @@ class Core:
             self.control = Control()
 
     def transcribe_audio(self, audio_path):
+        logging.info('语音识别中')
         if self.distribute_stt == 'offline':
             text = self.stt.save_and_transcribe(audio_path)
 
@@ -123,6 +125,7 @@ class Core:
         return history
 
     def generate_response(self, history, text):
+        logging.info('大模型推理中')
         if not text:
             text = '继续'
 
@@ -142,6 +145,7 @@ class Core:
         return new_message, self.history
 
     def synthesize(self, text):
+        logging.info('语音合成中')
         if self.distribute_tts == 'offline':
             audio_data_base64 = self.tts.synthesize_and_play(text)
 

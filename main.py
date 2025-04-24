@@ -107,7 +107,7 @@ def main():
                                     wave_file.close()
                                     # 语音转文字
                                     user_messsage = core.transcribe_audio(tmpfile.name)
-                                logging.info('语音转文本:' + user_messsage)
+                                logging.info('语音识别结果:' + user_messsage)
                                 # 解除进程锁，标记录音完成
                                 recording_complete.set()
 
@@ -124,8 +124,6 @@ def main():
                 stream.close()
             # 终止录音，关闭麦克风
             audio.terminate()
-        
-        
 
     # 文本输入
     def listen_for_text():
@@ -185,19 +183,16 @@ def main():
 
         # 模型生成响应
         new_message, history = core.generate_response(history, user_messsage)
-        # print('大模型回复:', )
-        logging.info('大模型回复' + new_message)
+        logging.info('大模型回复：' + new_message)
 
         # 文本转语音并播放
         audio_data_base64 = core.synthesize(new_message)
         # 异步了但没完全异步，有空再改
         asyncio.run(play_audio(audio_data_base64))
-        # print('语音播放完成。')
         logging.info('语音播放完成')
 
         # 执行命令
         core.system_control(new_message)
-        # print('指令执行完毕')
         logging.info('指令执行完毕')
 
 # 运行程序
