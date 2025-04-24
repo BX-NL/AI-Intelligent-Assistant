@@ -41,20 +41,28 @@ class Core:
             self.distribute_tts = self.settings_tts['mode']
             self.distribute_control = self.settings_control['mode']
 
-            # 获取各模块分布式接口
-            if self.distribute_model == 'online':
+            # 初始化各模块，获取各模块分布式接口
+            if self.distribute_model == 'offline':
+                self.model = Model()
+            elif self.distribute_model == 'online':
                 IP = self.settings_model['IP']
                 port = str(self.settings_model['port'])
                 self.url_model = 'http://' + IP + ':' + port + '/model'
-            if self.distribute_stt == 'online':
+            if self.distribute_stt == 'offline':
+                self.stt = STT()
+            elif self.distribute_stt == 'online':
                 IP = self.settings_stt['IP']
                 port = str(self.settings_stt['port'])
                 self.url_stt = 'http://' + IP + ':' + port + '/stt'
-            if self.distribute_tts == 'online':
+            if self.distribute_tts == 'offline':
+                self.tts = TTS()
+            elif self.distribute_tts == 'online':
                 IP = self.settings_tts['IP']
                 port = str(self.settings_tts['port'])
                 self.url_tts = 'http://' + IP + ':' + port + '/tts'
-            if self.distribute_control == 'online':
+            if self.distribute_control == 'offline':
+                self.control = Control()
+            elif self.distribute_control == 'online':
                 IP = self.settings_control['IP']
                 port = str(self.settings_control['port'])
                 self.url_control = 'http://' + IP + ':' + port + '/control'
