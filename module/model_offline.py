@@ -40,7 +40,7 @@ class Model():
         response, history = self.model.chat(self.tokenizer, self.prompt, history=[])
         # 输出问候语
         print(response)
-        print('用时', time.time()-start_time, '秒')
+        logging.info('Time used: ' + time.time()-start_time + 's')
         # todo 返回问候语
         # return response, history
         return history
@@ -53,7 +53,7 @@ class Model():
         response, history = self.model.chat(self.tokenizer, user_message, history=history)
         # todo 移除语气或另外存放
         new_message = response
-        print('用时', time.time()-start_time, '秒')
+        logging.info('Time used: ' + time.time()-start_time + 's')
         return new_message, history
 
 def debug():

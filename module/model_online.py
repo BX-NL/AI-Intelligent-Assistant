@@ -45,7 +45,7 @@ class Model:
         history = self.messages
         # todo 增加问候语，这print太假了
         print('[对话]你好，我是爱丽丝')
-        print('用时', time.time()-start_time, '秒')
+        logging.info('Time used: ' + time.time()-start_time + 's')
         return history
 
     # 传入用户输入的文本并获取回复

@@ -74,7 +74,8 @@ class TTS:
 def debug():
     tts = TTS()
     text = input('input:')
-    tts.synthesize_and_play(text)
+    audio_data_base64 = tts.synthesize_and_play(text)
+    print(audio_data_base64)
     print('output sucess')
 
 def api():
