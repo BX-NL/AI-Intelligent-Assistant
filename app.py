@@ -79,3 +79,5 @@ def get_status():
 if __name__ == '__main__':
     # ! 当debug =True时，各个模块会被实例化两次，暂不影响使用，实际部署时可改为False
     app.run(debug=False, host='0.0.0.0')
+
+# todo 需要语音中断功能
