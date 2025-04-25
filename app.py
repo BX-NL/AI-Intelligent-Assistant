@@ -1,5 +1,6 @@
 # import pyaudio
 import tempfile
+import logging
 from flask import Flask, render_template, request, jsonify
 from module.core import Core
 # import base64
@@ -65,14 +66,17 @@ def get_status():
     # 获取模块状态
     status_list = core.get_module_status()
     # todo 顺序好像有点问题，有空再改
-    status = {
-        '服务端': 'Local',
-        '当前连接': 'Local',
-        'Model': status_list[0],
-        'STT': status_list[1],
-        'TTS': status_list[2],
-        'control': status_list[3],
-    }
+    try:
+        status = {
+            '服务端': 'Local',
+            '当前连接': 'Local',
+            'Model': status_list[0],
+            'STT': status_list[1],
+            'TTS': status_list[2],
+            'control': status_list[3],
+        }
+    except:
+        logging.error('Some of Module was not client')
     return jsonify(status)
 
 
