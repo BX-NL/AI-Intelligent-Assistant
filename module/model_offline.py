@@ -40,7 +40,7 @@ class Model():
         response, history = self.model.chat(self.tokenizer, self.prompt, history=[])
         # 输出问候语
         print(response)
-        logging.info('Time used: ' + time.time()-start_time + 's')
+        logging.info('Time used: ' + str(time.time()-start_time) + 's')
         # todo 返回问候语
         # return response, history
         return history
