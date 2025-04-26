@@ -46,6 +46,7 @@ def send_message():
     return jsonify({'response': response_text, 'audio': audio_data_base64})
 
 
+# ! 好像录音按钮有bug，有空再改
 # 处理音频上传
 @app.route('/upload_audio', methods=['POST'])
 def upload_audio():
