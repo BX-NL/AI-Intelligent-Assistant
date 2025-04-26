@@ -43,6 +43,7 @@ class Core:
 
             # 初始化各模块，获取各模块分布式接口
             if self.distribute_model == 'offline':
+                # import
                 self.model = Model()
                 logging.info('Module Local Model')
             elif self.distribute_model == 'online':
@@ -52,6 +53,7 @@ class Core:
                 logging.info('Module Distribute Model: ' + IP + ':' + port)
 
             if self.distribute_stt == 'offline':
+                # import
                 self.stt = STT()
                 logging.info('Module Local STT')
             elif self.distribute_stt == 'online':
@@ -61,6 +63,7 @@ class Core:
                 logging.info('Module Distribute STT: ' + IP + ':' + port)
 
             if self.distribute_tts == 'offline':
+                # import
                 self.tts = TTS()
                 logging.info('Module Local TTS')
             elif self.distribute_tts == 'online':
