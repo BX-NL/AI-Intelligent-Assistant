@@ -73,7 +73,8 @@ class Core:
                 logging.info('Module Distribute TTS: ' + IP + ':' + port)
 
             if self.distribute_control == 'offline':
-                from .control import Control
+                # ! 有bug，不能这么写
+                # from .control import Control
                 self.control = Control()
                 logging.info('Module Local Control: ')
             elif self.distribute_control == 'online':
