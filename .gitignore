@@ -181,6 +181,8 @@ model_test.py
 *.docx
 *.pptx
 *.pdf
+*.xlsx
+inc.md
 
 # 其它
 Backup/
