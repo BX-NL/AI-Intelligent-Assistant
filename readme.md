@@ -24,6 +24,10 @@ Python >= 3.9
 
 >This command will probably make an error, you will need to manually install torch and etc.
 
+>文件是自动生成的，可能有几个不需要的也被塞进去了，建议照着程序代码手动安装
+
+>The file is automatically generated, and there may be a few unwanted things in it, it is recommended to install it manually according to the program source code.
+
 >根据自己的cuda版本修改命令，cpu版本或其它需求请自己研究：[PyTorch](https://pytorch.org/)
 
 >Modify this command according to your own CUDA version, CPU version or other, please research yourself: [PyTorch](https://pytorch.org/)
