@@ -1,12 +1,11 @@
 import io
 import os
 import sys
-# import time
 import base64
 import asyncio
-# import tempfile
 import edge_tts
-# from playsound import playsound
+import logging
+# import colorlog
 
 # 获取当前文件的绝对路径
 current_dir = os.path.dirname(os.path.abspath(__file__))
@@ -16,6 +15,10 @@ work_dir = os.path.dirname(current_dir)
 sys.path.append(work_dir)
 # 导入模块
 from module.config import setting
+
+# logging配置
+logging.basicConfig(level = logging.INFO,format = '%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+logger = logging.getLogger(__name__)
 
 class TTS:
     def __init__(self):

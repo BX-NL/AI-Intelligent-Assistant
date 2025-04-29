@@ -1,9 +1,15 @@
 # import pyaudio
 import tempfile
 import logging
+# import colorlog
 from flask import Flask, render_template, request, jsonify
 from module.core import Core
 # import base64
+
+# logging配置
+logging.basicConfig(level = logging.INFO,format = '%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+logger = logging.getLogger(__name__)
+
 # 创建Flask应用
 app = Flask(__name__)
 

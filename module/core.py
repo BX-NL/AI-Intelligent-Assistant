@@ -4,6 +4,7 @@ import logging
 # logging配置
 logging.basicConfig(level = logging.INFO,format = '%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 logger = logging.getLogger(__name__)
+
 # 系统核心不能以此方式运行
 if __name__ == '__main__':
     logging.error('Error Running: 系统核心不能以此方式运行')

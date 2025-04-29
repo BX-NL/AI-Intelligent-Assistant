@@ -3,6 +3,7 @@ import sys
 import wave
 import pyaudio
 import logging
+# import colorlog
 import keyboard
 from funasr import AutoModel
 from funasr.utils.postprocess_utils import rich_transcription_postprocess
@@ -15,6 +16,10 @@ work_dir = os.path.dirname(current_dir)
 sys.path.append(work_dir)
 # 导入模块
 from module.config import setting
+
+# logging配置
+logging.basicConfig(level = logging.INFO,format = '%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+logger = logging.getLogger(__name__)
 
 class STT():
     def __init__(self):

@@ -2,6 +2,7 @@ import os
 import sys
 import time
 import logging
+# import colorlog
 from transformers import AutoTokenizer, AutoModel
 # ? 不知道干啥用的，好像是哪里忘记删了
 # from cpm_kernels.kernels.base import round_up
@@ -14,6 +15,10 @@ work_dir = os.path.dirname(current_dir)
 sys.path.append(work_dir)
 # 导入模块
 from module.config import setting
+
+# logging配置
+logging.basicConfig(level = logging.INFO,format = '%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+logger = logging.getLogger(__name__)
 
 class Model():
     def __init__(self):

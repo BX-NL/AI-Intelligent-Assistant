@@ -2,6 +2,7 @@ import os
 import sys
 import time
 import logging
+# import colorlog
 from zhipuai import ZhipuAI
 
 # 获取当前文件的绝对路径
@@ -12,6 +13,10 @@ work_dir = os.path.dirname(current_dir)
 sys.path.append(work_dir)
 # 导入模块
 from module.config import setting
+
+# logging配置
+logging.basicConfig(level = logging.INFO,format = '%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+logger = logging.getLogger(__name__)
 
 class Model:
     def __init__(self):
