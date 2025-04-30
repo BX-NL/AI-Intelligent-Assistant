@@ -12,6 +12,8 @@ Here is an introduction
 
 一个人工智能助理，支持ChatGLM，支持智普清言API，缝合了FunASR、Edge-TTS，代码跟史一样，将就着用。
 
+An AI intelligence assistant that base on ChatGLM, supports Zhipu Qingyan API, with the FunASR and Edge-TTS, and the code is a mess, and will be used.
+
 ---
 
 ### 安装依赖 Install dependencies
