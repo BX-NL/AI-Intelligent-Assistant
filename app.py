@@ -44,8 +44,9 @@ def send_message():
 
     # 生成响应
     response_text, history = core.generate_response(history, user_input)
-    # todo 尝试修改为先返回再播放
+    # 生成音频数据
     audio_data_base64 = core.synthesize(response_text)
+    # 发送系统控制指令
     # ! 这行好像用不了
     # core.system_control(response_text)
 
@@ -56,14 +57,18 @@ def send_message():
 # 处理音频上传
 @app.route('/upload_audio', methods=['POST'])
 def upload_audio():
+    # 判断是否录制成功
     if 'audio' not in request.files:
         return jsonify({'error': 'No audio file uploaded'}), 400
 
+    # 获取录制的音频文件
     audio_file = request.files['audio']
+    # 音频数据保存至临时文件
     with tempfile.NamedTemporaryFile(suffix='.wav', delete=False) as tmpfile:
         audio_file.save(tmpfile.name)
         # 调用语音转文字
         text = core.transcribe_audio(tmpfile.name)
+        # 返回识别到的文本
         return jsonify({'text': text})
 
 

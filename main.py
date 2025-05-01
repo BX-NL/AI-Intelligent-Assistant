@@ -31,7 +31,8 @@ def main():
 
     # 初始化音频库
     audio = pyaudio.PyAudio()
-    # 录音设置 # todo 考虑移到setting里
+    # 音频格式，要和识别端保持一致，不建议修改
+    # todo 后面把这块塞到setting里
     # 16位音频格式、单声道、采样率、每个数据块包含的帧数
     FORMAT = pyaudio.paInt16
     CHANNELS = 1

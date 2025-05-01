@@ -29,7 +29,7 @@ class TTS:
 
     # 文本转语音，异步
     async def synthesize(self, text):
-        # 大陆内使用EdgeTTS需要代理，请设置
+        # 大陆内使用EdgeTTS需要代理，需要修改设置
         communicate = edge_tts.Communicate(
             text=text,
             voice=self.voice,
@@ -38,12 +38,14 @@ class TTS:
 
         # 将音频数据保存到内存中
         audio_data = io.BytesIO()
+        # 音频帧合成音频流
         async for chunk in communicate.stream():
             if chunk["type"] == "audio":
                 audio_data.write(chunk["data"])
 
+        # 获取音频数据
         stream = audio_data.getvalue()
-
+        # 返回音频数据
         return stream
 
     # todo 整不明白异步，临时使用这个转回同步来使用
@@ -59,20 +61,10 @@ class TTS:
 
         # 异步合成语音
         audio_data = asyncio.run(self.synthesize(text))
-        # 将音频数据转为base64编码并返回
+        # 将音频数据转为base64编码
         audio_data_base64 = base64.b64encode(audio_data).decode('utf-8')
+        # 返回音频数据
         return audio_data_base64
-
-        # # 将音频数据保存到临时文件
-        # with tempfile.NamedTemporaryFile(suffix='.mp3', delete=False) as tmpfile:
-        #     tmpfile.write(audio_data)
-        #     tmpfile_path = tmpfile.name
-        #     # 等待0.5秒避免文件未写入完成
-        #     time.sleep(0.5)
-
-        # # 使用 playsound 播放音频
-        # # 可换pygame库避免临时文件
-        # playsound(tmpfile_path)
 
 def debug():
     tts = TTS()
@@ -102,26 +94,18 @@ def api():
     @app.post("/tts")
     async def synthesize_and_play_api(request: TTSRequest):
         try:
+            # 获取传入的文本
             text = request.text
             # 合成语音时去除回复类型
             if '[' in text or ']' in text:
                 text = text[4:]
             # 异步合成语音
             audio_data = await tts.synthesize(text)
-            # 将音频数据转为base64编码并返回
+            # 将音频数据转为base64编码
             audio_data_base64 = base64.b64encode(audio_data).decode('utf-8')
-            # todo 为了分布式进行的妥协，后续尝试不用playsound，异步套异步会报错
-            # todo 待删除，这段的播放功能转前端了
-            # # 将音频数据保存到临时文件
-            # with tempfile.NamedTemporaryFile(suffix='.mp3', delete=False) as tmpfile:
-            #     tmpfile.write(audio_data)
-            #     tmpfile_path = tmpfile.name
-            #     # 等待0.5秒避免文件未写入完成
-            #     time.sleep(0.5)
-
-            # # 使用 playsound 播放音频
-            # playsound(tmpfile_path)
+            # 返回音频数据
             return {'audio': audio_data_base64}
+
         except Exception:
             raise HTTPException(status_code=500, detail=str(Exception))
 

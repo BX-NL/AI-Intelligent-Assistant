@@ -31,7 +31,9 @@ class STT():
             vad_kwargs={'max_single_segment_time': 30000},
             device='cuda:0',
         )
-        # 音频格式，要和录音端保持一致
+        # 音频格式，要和录音端保持一致，不建议修改
+        # todo 后面把这块塞到setting里
+        # 16位音频格式、单声道、采样率、每个数据块包含的帧数
         self.FORMAT = pyaudio.paInt16  # 16位音频格式
         self.CHANNELS = 1              # 单声道
         self.RATE = 16000              # 采样率
@@ -49,10 +51,10 @@ class STT():
             merge_vad=True,
             merge_length_s=15,
         )
-        # 获取返回结果
+        # 获取识别到的文本
         text = rich_transcription_postprocess(response[0]['text'])
         logging.info('识别结果:' + text)
-        # print('识别结果:', text)
+        # 返回识别到的文本
         return text
 
 
@@ -71,7 +73,8 @@ def debug():
     # 判断是否退出
     exit_program = False
 
-    # 录音设置 # todo 考虑移到setting里
+    # 音频格式，要和识别端保持一致，不建议修改
+    # todo 后面把这块塞到setting里
     # 16位音频格式、单声道、采样率、每个数据块包含的帧数
     FORMAT = pyaudio.paInt16
     CHANNELS = 1
@@ -160,6 +163,7 @@ def api():
     async def save_and_transcribe_api(tmpfile: UploadFile = File(...)):
         try:
             # ? 用不了相对路径，有空再研究
+            # todo os.path
             tmpfile_path = f'D:/{tmpfile.filename}'
             # 保存文件到临时路径
             with open(tmpfile_path, 'wb') as file:
