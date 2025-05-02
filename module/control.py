@@ -59,7 +59,7 @@ class Control:
 
         elif type == '指令':
             if message[0:2] == '启动':
-                # 字符串切片获取目标程序
+                # 字符串切片获取目标程序名称
                 file_name = message[2:]
                 # 搜寻目标程序对应的文件名
                 try:
@@ -75,11 +75,11 @@ class Control:
                         file_name = self.list_cus[file_name] + '.lnk'
                         # 生成文件路径
                         file_path = os.path.join('../', file_name)
-                    print(file_path)
+                    logging.info('程序启动中：' + file_path)
+                    # 启动程序
+                    os.startfile(file_path)
                 except:
-                    print('ERROR')
-            # 启动程序
-            os.startfile(file_path)
+                    logging.error('目标应用不存在')
 
         elif type == '文本':
             #控制设备输入文本
