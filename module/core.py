@@ -107,6 +107,7 @@ class Core:
     # 配置大模型处理模块-大模型推理
     def generate_response(self, history, text):
         logging.info('大模型推理中')
+        # 输入空消息时自动继续
         if not text:
             text = '继续'
 
@@ -181,7 +182,7 @@ class Core:
     def get_module_status(self):
         status = []
 
-        # model
+        # 获取大模型处理模块运行状态
         if self.distribute_model == 'offline':
             statu = 'Local'
         elif self.distribute_model == 'online':
@@ -195,7 +196,7 @@ class Core:
             logging.error('Error Setting: Model')
         status.append(statu)
 
-        # STT
+        # 获取语音识别模块运行状态
         if self.distribute_stt == 'offline':
             statu = 'Local'
         elif self.distribute_stt == 'online':
@@ -209,7 +210,7 @@ class Core:
             logging.error('Error Setting: STT')
         status.append(statu)
 
-        # TTS
+        # 获取语音合成模块运行状态
         if self.distribute_tts == 'offline':
             statu = 'Local'
         elif self.distribute_tts == 'online':
@@ -223,7 +224,7 @@ class Core:
             logging.error('Error Setting: TTS')
         status.append(statu)
 
-        # control
+        # 获取系统控制模块运行状态
         if self.distribute_control == 'offline':
             statu = 'Local'
         elif self.distribute_control == 'online':

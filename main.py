@@ -158,8 +158,7 @@ def main():
             time.sleep(0.5)
 
         # 使用 playsound 播放音频
-        # 可换pygame库避免临时文件
-        # todo 需要try，存在可能的报错
+        # 可以换别的库避免使用临时文件
         playsound(tmpfile_path)
 
     # 开始
@@ -171,7 +170,7 @@ def main():
         print('Model: ', status_list[0], '   STT: ', status_list[1])
         print('TTS:   ', status_list[2], '   control: ', status_list[3])
         print('================================')
-        # 用户输入
+        # 等待用户输入
         print('输入文本或按下', hotkey, '开始语音输入:')
         # 进程锁
         recording_complete.wait()

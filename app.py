@@ -15,8 +15,6 @@ app = Flask(__name__)
 
 # 初始化核心模块
 core = Core()
-# 初始化音频模块
-# audio = pyaudio.PyAudio()
 
 # 初始化 history
 history = core.get_in_prompt()
@@ -67,6 +65,7 @@ def upload_audio():
     with tempfile.NamedTemporaryFile(suffix='.wav', delete=False) as tmpfile:
         audio_file.save(tmpfile.name)
         # 调用语音转文字
+        # ? 这个name其实是完整路径
         text = core.transcribe_audio(tmpfile.name)
         # 返回识别到的文本
         return jsonify({'text': text})
