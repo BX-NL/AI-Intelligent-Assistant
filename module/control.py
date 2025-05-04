@@ -31,7 +31,6 @@ class Control:
         self.list_usr = {'Onedrive': 'OneDrive - Personal', }
         # 自定义路径
         self.list_cus = {'test': 'testtest', }
-        pass
 
     def extract_message(self, response_text):
         # 正则表达式提取type
@@ -42,7 +41,7 @@ class Control:
         else:
             type = 'ERROR'
 
-        # 提取message
+        # 正则表达式提取message
         message_pattern = r'\]\s*(.*)'
         message_match = re.search(message_pattern, response_text)
         if message_match:
@@ -50,6 +49,7 @@ class Control:
         else:
             message = 'None'
 
+        # 返回文本类型和信息
         return type, message
 
     def device_control(self, type, message):

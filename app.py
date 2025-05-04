@@ -38,6 +38,7 @@ def send_message():
     global history
     # 获取用户输入
     data = request.json
+    # 获取用户输入的文本
     user_input = data.get('message')
 
     # 生成响应
@@ -87,7 +88,7 @@ def get_status():
             'control': status_list[3],
         }
     except:
-        logging.error('Some of Module was not client')
+        logging.error('Some Module was not client')
     return jsonify(status)
 
 
