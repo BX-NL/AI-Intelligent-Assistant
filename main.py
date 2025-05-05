@@ -51,8 +51,7 @@ def main():
     # 初始化大模型
     logging.info('大模型初始化中')
     # 根据setting里选用的model和prompt
-    # 加载大模型
-    # todo 需要try中断
+    # 加载大模型并注入提示词
     try:
         history = core.get_in_prompt()
     except:

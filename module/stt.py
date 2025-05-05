@@ -4,7 +4,6 @@ import wave
 import pyaudio
 import logging
 # import colorlog
-import keyboard
 from funasr import AutoModel
 from funasr.utils.postprocess_utils import rich_transcription_postprocess
 
@@ -34,10 +33,10 @@ class STT():
         # 音频格式，要和录音端保持一致，不建议修改
         # todo 后面把这块塞到setting里
         # 16位音频格式、单声道、采样率、每个数据块包含的帧数
-        self.FORMAT = pyaudio.paInt16  # 16位音频格式
-        self.CHANNELS = 1              # 单声道
-        self.RATE = 16000              # 采样率
-        self.CHUNK = 1024              # 每个数据块包含的帧数
+        self.FORMAT = pyaudio.paInt16
+        self.CHANNELS = 1
+        self.RATE = 16000
+        self.CHUNK = 1024
 
 
     def save_and_transcribe(self, audio_path):
@@ -62,6 +61,7 @@ def debug():
     # demo 此处仅用于测试
     import time
     import tempfile
+    import keyboard
 
     # 初始化STT
     stt = STT()
