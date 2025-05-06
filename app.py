@@ -48,6 +48,8 @@ def send_message():
     # ! 这行好像用不了
     # core.system_control(response_text)
 
+    # 返回音频数据的base64
+    # todo 尝试异步，先返回再发送系统控制命令
     return jsonify({'response': response_text, 'audio': audio_data_base64})
 
 
@@ -77,6 +79,7 @@ def get_status():
     # 获取模块状态
     status_list = core.get_module_status()
     # todo 顺序好像有点问题，有空再改
+    # 写入模块状态数据
     try:
         status = {
             '服务端': 'Local',
@@ -86,8 +89,10 @@ def get_status():
             'TTS': status_list[2],
             'control': status_list[3],
         }
+    # core那边try过了，这里可以不要
     except:
         logging.error('Some Module was not client')
+    # 返回模块状态数据
     return jsonify(status)
 
 
