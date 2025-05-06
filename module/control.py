@@ -54,9 +54,11 @@ class Control:
 
     def device_control(self, type, message):
         # 分类文本类型
+        # todo 留个坑位，以后可用于对接音箱
         if type == '对话':
             pass
 
+        # 执行指令
         elif type == '指令':
             if message[0:2] == '启动':
                 # 字符串切片获取目标程序名称
@@ -81,6 +83,8 @@ class Control:
                 except:
                     logging.error('目标应用不存在')
 
+        # 控制设备输入文本
+        # ? 好像只能支持Windows
         elif type == '文本':
             #控制设备输入文本
             for char in message:
@@ -93,11 +97,12 @@ class Control:
                 # 控制设备输入文本，这个打不了中文
                 # pyautogui.typewrite(message=message, interval=0.1)
 
+        # 一般大模型不会出错，这两个留着好了
         elif type == 'ERROR':
-            print('回复文本不符合格式，请检查大模型。')
+            logging.error('回复文本不符合格式，请检查大模型。')
 
         else:
-            print('文本错误')
+            logging.error('文本错误')
 
 def debug():
     control = Control()
