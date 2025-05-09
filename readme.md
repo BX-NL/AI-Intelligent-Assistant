@@ -203,6 +203,26 @@ Python >= 3.9
 
 ---
 
+### 未来可期 Todo
+
+加个spark-TTS
+
+交互终端：pyQt
+
+保存聊天记录到MySQL
+
+允许从MySQL读取聊天记录并提取核心实现长期记忆
+
+过滤器Filter
+
+控制模块做个打游戏的功能
+
+控制模块加个画图功能，生成参数丢SD里
+
+语音合成可以尝试用RVC
+
+---
+
 ### 参考 Templates
 
 [ChatGLM3](https://github.com/THUDM/ChatGLM3)
