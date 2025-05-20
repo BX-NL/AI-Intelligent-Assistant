@@ -92,6 +92,8 @@ class Core:
     # 配置各模块对应功能
     # 配置大模型处理模块-提示词注入
     def get_in_prompt(self):
+        '''get prompt from setting and return history'''
+
         if self.distribute_model == 'offline':
             history = self.model.in_prompt()
 
@@ -106,6 +108,8 @@ class Core:
 
     # 配置大模型处理模块-大模型推理
     def generate_response(self, history, text):
+        '''generate response from history and text'''
+
         logging.info('大模型推理中')
         # 输入空消息时自动继续
         if not text:
@@ -128,6 +132,8 @@ class Core:
 
     # 配置语音转文字
     def transcribe_audio(self, audio_path):
+        '''transcribe audio to text'''
+
         logging.info('语音识别中')
         if self.distribute_stt == 'offline':
             text = self.stt.save_and_transcribe(audio_path)
@@ -149,6 +155,8 @@ class Core:
 
     # 配置文字转语音
     def synthesize(self, text):
+        '''synthesize text to audio'''
+
         logging.info('语音合成中')
         if self.distribute_tts == 'offline':
             audio_data_base64 = self.tts.synthesize_and_play(text)
@@ -166,6 +174,7 @@ class Core:
 
     # 配置系统控制模块
     def system_control(self, text):
+        '''control system by text'''
         if self.distribute_control == 'offline':
             type, message = self.control.extract_message(text)
             self.control.device_control(type, message)
@@ -180,6 +189,7 @@ class Core:
     # 用于获取各模块运行状态
     # 脑子转不过来了，有空再弄，先这么跑着吧
     def get_module_status(self):
+        '''get module status'''
         status = []
 
         # 获取大模型处理模块运行状态
